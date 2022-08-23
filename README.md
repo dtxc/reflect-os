@@ -1,2 +1,2 @@
 # test-os
-TODO: mbr, disk loader, 32 bit print support in boot files, 32 bit switch
+x86_64 bit os based on [this os tutorial](https://github.com/cfenollosa/os-tutorial)
