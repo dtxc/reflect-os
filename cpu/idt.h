@@ -15,7 +15,7 @@ typedef struct {
 typedef struct {
     uint16_t limit; //no calculus reference
     uint32_t base;
-} __attribute((packed)) idt_register_t;
+} __attribute__((packed)) idt_register_t;
 
 #define IDT_ENTRIES 256
 
