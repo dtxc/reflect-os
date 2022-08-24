@@ -10,7 +10,8 @@
 
 typedef enum {
     CHAR,
-    INT
+    INT,
+    VOID
 } TYPE;
 
 void* alloc(TYPE t, int n) {
@@ -23,6 +24,9 @@ void* alloc(TYPE t, int n) {
         case CHAR: {
             ptr = (char *) mem_alloc(n * sizeof(char));
             break;
+        }
+        case VOID: {
+            ptr = (void *) mem_alloc(n * sizeof(void*));
         }
         default: {
             ptr = (void *) mem_alloc(n * sizeof(void*));
