@@ -2,7 +2,7 @@
 #include "ports.h"
 #include <stdint.h>
 #include "../kernel/mem.h"
-#include "../kernel/util.h"
+#include "../lib/string.h"
 
 void set_cursor(int offset) {
     offset /= 2;

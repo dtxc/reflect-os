@@ -3,7 +3,7 @@
 #include "ports.h"
 #include "../cpu/isr.h"
 #include "display.h"
-#include "../kernel/util.h"
+#include "../lib/string.h"
 #include "../kernel/kernel.h"
 
 #define BACKSPACE 0x0E

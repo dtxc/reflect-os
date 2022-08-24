@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include "mem.h"
 #include "../drivers/display.h"
-#include "util.h"
+#include "../lib/string.h"
 
 void memory_copy(uint8_t *source, uint8_t *dest, uint32_t nbytes) {
     int i;

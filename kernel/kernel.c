@@ -3,7 +3,7 @@
 #include "../cpu/timer.h"
 #include "../drivers/display.h"
 #include "../drivers/keyboard.h"
-#include "util.h"
+#include "../lib/string.h"
 #include "mem.h"
 
 void* alloc(int n) {
@@ -64,12 +64,12 @@ void start_kernel() {
     print_nl();
 
     clear_screen();
-    print_string("this is a welcome message");
+    print_string("this is a welcome message\n");
     print_string(">> ");
 }
 
 void execute_command(char *input) {
-    if (compare_string(input, "HALT") == 0) {
+    if (compare_string(input, "HALT") == 0 || compare_string(input, "EXIT") == 0) {
         print_string("System is going down for halt now!\n");
         asm volatile("hlt");
     } else if (compare_string(input, "CLEAR") == 0) {
@@ -77,7 +77,7 @@ void execute_command(char *input) {
         print_string(">> ");
     } else if (compare_string(input, "MEMTEST") == 0) {
         int *ptr = alloc(10);
-        print_string("int *ptr = alloc(10)");
+        print_string("int *ptr = alloc(10)\n");
         print_dynamic_mem();
         print_nl();
         mem_free(ptr);
@@ -86,11 +86,13 @@ void execute_command(char *input) {
         print_nl();
         print_string(">> ");
     } else if (compare_string(input, "HELP") == 0) {
-        print_nl();
+        print_string("HALT - stops the system\nCLEAR - clears the screen\nMEMTEST - tests dynamic memory allocation\nECHO <text> - prints text\n");
+        print_string(">> ");
     } else if (startswith(input, "ECHO")) {
-        char *result[2];
-        //split_string(input, ' ', 1);
-        print_string(result[1]);
+        for (int i = 0; i < 4; i++){
+            input = remove_by_index(input, i);
+        }
+        print_string(input);
         print_nl();
         print_string(">> ");
     }
