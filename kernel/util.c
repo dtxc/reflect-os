@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdbool.h>
+#include "mem.h"
 
 int string_length(char s[]) {
     int i = 0;
@@ -52,4 +53,22 @@ int compare_string(char s1[], char s2[]) {
         if (s1[i] == '\0') return 0;
     }
     return s1[i] - s2[i];
+}
+
+bool startswith(char str[], char what[]) {
+    int len = string_length(what);
+    for (int i = 0; i < len; i++) {
+        if (what[i] != str[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+int find_matches(char str[], char what) {
+    int matches = 0;
+    for (int i = 0; i < string_length(str); i++) {
+        if (str[i] == what) matches++;
+    }
+    return matches;
 }
