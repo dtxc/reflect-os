@@ -1,3 +1,5 @@
+// TODO: split string
+
 #include <stdint.h>
 #include <stdbool.h>
 #include "mem.h"
