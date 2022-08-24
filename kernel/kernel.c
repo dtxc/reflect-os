@@ -1,3 +1,5 @@
+// TODO: echo command
+
 #include "../cpu/idt.h"
 #include "../cpu/isr.h"
 #include "../cpu/timer.h"
@@ -6,8 +8,26 @@
 #include "../lib/string.h"
 #include "../lib/mem.h"
 
-void* alloc(int n) {
-    int *ptr = (int *) mem_alloc(n * sizeof(int));
+typedef enum {
+    CHAR,
+    INT
+} TYPE;
+
+void* alloc(TYPE t, int n) {
+    void *ptr;
+    switch (t) {
+        case INT: {
+            ptr = (int *) mem_alloc(n * sizeof(int));
+            break;
+        }
+        case CHAR: {
+            ptr = (char *) mem_alloc(n * sizeof(char));
+            break;
+        }
+        default: {
+            ptr = (void *) mem_alloc(n * sizeof(void*));
+        }
+    }
     if (ptr == NULL_POINTER) {
         print_string("Memory not allocated\n");
     }
@@ -33,12 +53,12 @@ void start_kernel() {
     print_dynamic_mem();
     print_nl();
 
-    int *ptr1 = alloc(5);
+    int *ptr1 = alloc(INT, 5);
     print_string("int *ptr1 = alloc(5)\n");
     print_dynamic_mem();
     print_nl();
 
-    int *ptr2 = alloc(10);
+    int *ptr2 = alloc(INT, 10);
     print_string("int *ptr2 = alloc(10)\n");
     print_dynamic_mem();
     print_nl();
@@ -48,7 +68,7 @@ void start_kernel() {
     print_dynamic_mem();
     print_nl();
 
-    int *ptr3 = alloc(2);
+    int *ptr3 = alloc(INT, 2);
     print_string("int *ptr3 = alloc(2)\n");
     print_dynamic_mem();
     print_nl();
@@ -64,7 +84,7 @@ void start_kernel() {
     print_nl();
 
     clear_screen();
-    print_string("this is a welcome message\n");
+    print_string("this is a welcome message\ntype HELP for help\n");
     print_string(">> ");
 }
 
@@ -76,7 +96,7 @@ void execute_command(char *input) {
         clear_screen();
         print_string(">> ");
     } else if (compare_string(input, "MEMTEST") == 0) {
-        int *ptr = alloc(10);
+        int *ptr = alloc(INT, 10);
         print_string("int *ptr = alloc(10)\n");
         print_dynamic_mem();
         print_nl();
@@ -89,10 +109,16 @@ void execute_command(char *input) {
         print_string("HALT - stops the system\nCLEAR - clears the screen\nMEMTEST - tests dynamic memory allocation\nECHO <text> - prints text\n");
         print_string(">> ");
     } else if (startswith(input, "ECHO")) {
-        for (int i = 0; i < 4; i++){
-            input = remove_by_index(input, i);
+        // for (int i = 0; i < 4; i++){
+        //     input = remove_by_index(input, 0);
+        // }
+        char out[string_length(input)+1];
+        remove_by_index(input, out, 0);
+        char *o = &out[0];
+        for (int i = 0; i < string_length(out); i++) {
+            print_string((o+i));
         }
-        print_string(input);
+        //print_string(out);
         print_nl();
         print_string(">> ");
     }
