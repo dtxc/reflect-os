@@ -1,5 +1,3 @@
-// TODO: echo command
-
 #include "../cpu/idt.h"
 #include "../cpu/isr.h"
 #include "../cpu/timer.h"
