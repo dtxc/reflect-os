@@ -1,12 +1,5 @@
-#include "util.h"
 #include <stdint.h>
-
-void memory_copy(uint8_t* source, uint8_t* dest, uint32_t nbytes) {
-    int i;
-    for (i = 0; i < nbytes; ++i) {
-        *(dest + i) = *(source + i);
-    }
-}
+#include <stdbool.h>
 
 int string_length(char s[]) {
     int i = 0;
@@ -24,15 +17,39 @@ void reverse(char s[]) {
 }
 
 void int_to_string(int n, char str[]) {
-    int i, s;
-    if ((s = n) < 0) n = -n;
+    int i, sign;
+    if ((sign = n) < 0) n = -n;
     i = 0;
     do {
         str[i++] = n % 10 + '0';
     } while ((n /= 10) > 0);
 
-    if (s < 0) str[i++] = '-';
+    if (sign < 0) str[i++] = '-';
     str[i] = '\0';
 
     reverse(str);
+}
+
+void append(char s[], char n) {
+    int len = string_length(s);
+    s[len] = n;
+    s[len+1] = '\0';
+}
+
+bool backspace(char s[]) {
+    int len = string_length(s);
+    if (len > 0) {
+        s[len - 1] = '\0';
+        return true;
+    } else {
+        return false;
+    }
+}
+
+int compare_string(char s1[], char s2[]) {
+    int i;
+    for (i = 0; s1[i] == s2[i]; i++) {
+        if (s1[i] == '\0') return 0;
+    }
+    return s1[i] - s2[i];
 }

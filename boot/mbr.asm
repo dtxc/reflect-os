@@ -1,4 +1,4 @@
-[org 0x7C00]
+[org 0x7c00]
 KERNEL_OFFSET equ 0x1000
 
 mov [BOOT_DRIVE], dl
@@ -38,7 +38,11 @@ BEGIN_32BIT:
     call KERNEL_OFFSET
     jmp $
 
-BOOT_DRIVE db 0 ; storing boot drive in memory because dl can get overwritten
-MSG_16BIT_MODE db "Started in 16-bit real mode", 0
-MSG_32BIT_MODE db "Landed in 32-bit protected mode", 0
+
+BOOT_DRIVE db 0
+MSG_16BIT_MODE db "Started in 16-bit Real Mode", 0
+MSG_32BIT_MODE db "Landed in 32-bit Protected Mode", 0
 MSG_LOAD_KERNEL db "Loading kernel into memory", 0
+
+times 510 - ($-$$) db 0
+dw 0xaa55

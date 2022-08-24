@@ -3,41 +3,31 @@
 #include "../cpu/timer.h"
 #include "../drivers/display.h"
 #include "../drivers/keyboard.h"
-
 #include "util.h"
 #include "mem.h"
 
 void* alloc(int n) {
-    int* ptr = (int*) mem_alloc(n * sizeof(int));
+    int *ptr = (int *) mem_alloc(n * sizeof(int));
     if (ptr == NULL_POINTER) {
-        print_string("Memory not allocated.\n");
-    } else {
-        for (int i = 0; i < n; ++i) {
-            ptr[i] = i + 1;
-        }
-        for (int i = 0; i < n; ++i) {
-            char str[256];
-            int_to_string(ptr[i], str);
-            print_string(str);
-        }
-        print_nl();
+        print_string("Memory not allocated\n");
     }
     return ptr;
 }
 
 void start_kernel() {
     clear_screen();
-    print_string("Installing interrupt srvice routins.\n");
+    print_string("Installing interrupt service routines\n");
     isr_install();
 
-    print_string("Enabling external interrutps.\n");
+    print_string("Enabling external interrupts\n");
     asm volatile("sti");
 
-    print_string("Initializing keyboard (IRQ 1).\n");
+    print_string("Initializing keyboard (IRQ 1)\n");
     init_keyboard();
 
-    print_string("Initializing dynamic memory.\n");
+    print_string("Initializing dynamic memory\n");
     init_dynamic_mem();
+
     clear_screen();
 
     print_string("init_dynamic_mem()\n");
@@ -45,13 +35,13 @@ void start_kernel() {
     print_dynamic_mem();
     print_nl();
 
-    int* ptr1 = alloc(5);
-    print_string("int* ptr1 = alloc(5)\n");
+    int *ptr1 = alloc(5);
+    print_string("int *ptr1 = alloc(5)\n");
     print_dynamic_mem();
     print_nl();
 
-    int* ptr2 = alloc(10);
-    print_string("int* ptr2 = alloc(10)\n");
+    int *ptr2 = alloc(10);
+    print_string("int *ptr2 = alloc(10)\n");
     print_dynamic_mem();
     print_nl();
 
@@ -60,8 +50,8 @@ void start_kernel() {
     print_dynamic_mem();
     print_nl();
 
-    int* ptr3 = alloc(2);
-    print_string("int* ptr3 = alloc(2)\n");
+    int *ptr3 = alloc(2);
+    print_string("int *ptr3 = alloc(2)\n");
     print_dynamic_mem();
     print_nl();
 
@@ -78,22 +68,27 @@ void start_kernel() {
     print_string(">> ");
 }
 
-void execute_command(char* input) {
-    if (compare_string(input, "halt") == 0) {
-        print_string("System is going down for halt, now!\n");
+void execute_command(char *input) {
+    if (compare_string(input, "HALT") == 0) {
+        print_string("System is going down for halt now!\n");
         asm volatile("hlt");
-    } else if (compare_string(input, "memtest") == 0) {
-        int* pointer = alloc(10);
-        print_string("int* pointer = alloc(10)");
+    } else if (compare_string(input, "CLEAR") == 0) {
+        clear_screen();
+        print_string(">> ");
+    } else if (compare_string(input, "MEMTEST") == 0) {
+        int *ptr = alloc(10);
+        print_string("int *ptr = alloc(10)");
         print_dynamic_mem();
         print_nl();
-        mem_free(pointer);
-        print_string("mem_free(pointer)\n");
+        mem_free(ptr);
+        print_string("mem_free(ptr)\n");
         print_dynamic_mem();
         print_nl();
         print_string(">> ");
     }
-    print_string("Unknown command: ");
-    print_string(input);
-    print_string("\n>> ");
+    else {
+        print_string("Unknown command: ");
+        print_string(input);
+        print_string("\n>> ");
+    }
 }

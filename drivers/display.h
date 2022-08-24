@@ -1,14 +1,14 @@
 #pragma once
 
-#define VIDEO_ADDRESS 0xB8000
+#define VIDEO_ADDRESS 0xb8000
 #define MAX_ROWS 25
 #define MAX_COLS 80
-#define WHITE_ON_BLACK 0x0F
-#define REG_SCREEN_CTRL 0x3D4
-#define REG_SCREEN_DATA 0x3D5
+#define WHITE_ON_BLACK 0x0f
+#define REG_SCREEN_CTRL 0x3d4
+#define REG_SCREEN_DATA 0x3d5
 
-void print_string(char* string);
+void print_string(char *string);
 void print_nl();
 void clear_screen();
-
-int scroll_ln(int offset); //no natural logarithm
+int scroll_ln(int offset);
+void print_backspace();

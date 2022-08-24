@@ -26,7 +26,7 @@ typedef struct {
     uint32_t eip, cs, eflags, useresp, ss;
 } registers_t;
 
-typedef void (*isr_t)(registers_t*);
+typedef void (*isr_t)(registers_t *);
 
 extern void isr0();
 extern void isr1();
@@ -61,7 +61,6 @@ extern void isr29();
 extern void isr30();
 extern void isr31();
 
-
 extern void irq0();
 extern void irq1();
 extern void irq2();
@@ -79,7 +78,6 @@ extern void irq13();
 extern void irq14();
 extern void irq15();
 
-
 void isr_install();
-void isr_handler(registers_t* r);
+void isr_handler(registers_t *r);
 void register_interrupt_handler(uint8_t n, isr_t handler);

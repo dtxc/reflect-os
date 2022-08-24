@@ -5,7 +5,6 @@ disk_load:
     mov ah, 0x02
     mov al, dh
     mov cl, 0x02
-
     mov ch, 0x00
     mov dh, 0x00
 
@@ -34,4 +33,4 @@ disk_loop:
     jmp $
 
 DISK_ERROR: db "Disk read error", 0
-SECTORS_ERROR: db "Incorrect number of sectorss read", 0
+SECTORS_ERROR: db "Incorrect number of sectors read", 0

@@ -3,7 +3,7 @@ gdt_start:
     dd 0x0
 
 gdt_code:
-    dw 0xFFFF
+    dw 0xffff
     dw 0x0
     db 0x0
     db 10011010b
@@ -11,7 +11,7 @@ gdt_code:
     db 0x0
 
 gdt_data:
-    dw 0xFFFF
+    dw 0xffff
     dw 0x0
     db 0x0
     db 10010010b
