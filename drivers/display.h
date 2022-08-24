@@ -10,5 +10,5 @@
 void print_string(char *string);
 void print_nl();
 void clear_screen();
-int scroll_ln(int offset);
+int scroll_ln(int offset); //no scroll natural logarithm
 void print_backspace();
