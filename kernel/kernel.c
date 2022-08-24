@@ -28,8 +28,6 @@ void start_kernel() {
     print_string("Initializing dynamic memory\n");
     init_dynamic_mem();
 
-    clear_screen();
-
     print_string("init_dynamic_mem()\n");
     print_dynamic_node_size();
     print_dynamic_mem();
@@ -65,6 +63,8 @@ void start_kernel() {
     print_dynamic_mem();
     print_nl();
 
+    clear_screen();
+    print_string("this is a welcome message");
     print_string(">> ");
 }
 
@@ -83,6 +83,14 @@ void execute_command(char *input) {
         mem_free(ptr);
         print_string("mem_free(ptr)\n");
         print_dynamic_mem();
+        print_nl();
+        print_string(">> ");
+    } else if (compare_string(input, "HELP") == 0) {
+        print_nl();
+    } else if (startswith(input, "ECHO")) {
+        char *result[2];
+        //split_string(input, ' ', 1);
+        print_string(result[1]);
         print_nl();
         print_string(">> ");
     }
