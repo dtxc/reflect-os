@@ -10,7 +10,7 @@
 void* alloc(int n) {
     int* ptr = (int*) mem_alloc(n * sizeof(int));
     if (ptr == NULL_POINTER) {
-        print_string("Memory not allocated.\n")
+        print_string("Memory not allocated.\n");
     } else {
         for (int i = 0; i < n; ++i) {
             ptr[i] = i + 1;
