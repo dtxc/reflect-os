@@ -8,6 +8,8 @@ x86_64 os based on [this os tutorial](https://github.com/cfenollosa/os-tutorial)
 > + nasm
 >
 > + x86_64-elf-gcc
+>
+> + qemu
 
 ### building
 `make build && make run`
