@@ -95,12 +95,12 @@ int split(char *str, char delimiter, char ***arr) {
     }
 
     *arr = alloc(PCHAR, count);
-    if (*arr == 0) return 1;
+    if (*arr == 0) return 0;
     p = str;
     while (*p != '\0') {
         if (*p == delimiter) {
             (*arr)[i] = alloc(CHAR, token_len);
-            if ((*arr)[i] == 0) return 1;
+            if ((*arr)[i] == 0) return 0;
             token_len = 0;
             i++;
         }
@@ -108,7 +108,7 @@ int split(char *str, char delimiter, char ***arr) {
         token_len++;
     }
     (*arr)[i] = alloc(CHAR, token_len);
-    if ((*arr)[i] == 0) return 1;
+    if ((*arr)[i] == 0) return 0;
     i = 0;
     p = str;
     t = ((*arr)[i]);
