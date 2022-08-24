@@ -4,7 +4,7 @@
 #include "../drivers/display.h"
 #include "../drivers/keyboard.h"
 #include "../lib/string.h"
-#include "mem.h"
+#include "../lib/mem.h"
 
 void* alloc(int n) {
     int *ptr = (int *) mem_alloc(n * sizeof(int));
