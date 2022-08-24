@@ -46,3 +46,12 @@ debug: os-image.bin kernel.elf
 
 %.dis: %.bin
 	ndisasm -b 32 $< > $@
+
+clean:
+	$(RM) kernel.bin
+	$(RM) *.o *.dis *.elf
+	$(RM) kernel/*.o
+	$(RM) boot/*.o boot/*.bin
+	$(RM) drivers/*.o
+	$(RM) cpu/*.o
+	$(RM) lib/*.o
