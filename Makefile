@@ -1,8 +1,15 @@
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c)
-HEADERS = $(wildcard kernel/*.h  drivers/*.h cpu/*.h)
+C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c lib/*.c)
+HEADERS = $(wildcard kernel/*.h  drivers/*.h cpu/*.h lib/*.h)
 OBJ_FILES = ${C_SOURCES:.c=.o cpu/interrupt.o}
 
-all: run
+build: os-image.bin
+	$(RM) kernel.bin
+	$(RM) *.o *.dis *.elf
+	$(RM) kernel/*.o
+	$(RM) boot/*.o boot/*.bin
+	$(RM) drivers/*.o
+	$(RM) cpu/*.o
+	$(RM) lib/*.o
 
 kernel.bin: boot/kernel_entry.o ${OBJ_FILES}
 	x86_64-elf-ld -m elf_i386 -o $@ -Ttext 0x1000 $^ --oformat binary
@@ -10,8 +17,13 @@ kernel.bin: boot/kernel_entry.o ${OBJ_FILES}
 os-image.bin: boot/mbr.bin kernel.bin
 	cat $^ > $@
 
-run: os-image.bin
-	qemu-system-i386 -fda $<
+run:
+ifeq ($(shell test -e os-image.bin && echo -n yes),yes)
+	qemu-system-i386 -fda os-image.bin
+else
+	$(MAKE) build 
+	qemu-system-i386 -fda os-image.bin
+endif
 
 echo: os-image.bin
 	xxd $<
@@ -34,10 +46,3 @@ debug: os-image.bin kernel.elf
 
 %.dis: %.bin
 	ndisasm -b 32 $< > $@
-
-clean:
-	$(RM) *.bin *.o *.dis *.elf
-	$(RM) kernel/*.o
-	$(RM) boot/*.o boot/*.bin
-	$(RM) drivers/*.o
-	$(RM) cpu/*.o
