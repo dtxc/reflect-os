@@ -1,8 +1,6 @@
-// TODO: split_string, remove
-
 #include <stdint.h>
 #include <stdbool.h>
-#include "../kernel/mem.h"
+#include "mem.h"
 #include "string.h"
 
 int string_length(char *s) {
@@ -83,9 +81,53 @@ int get_index(char *str, char what) {
     return string_length(str) + 1;
 }
 
-char *remove(char *str, char *what) { }
+int split(char *str, char delimiter, char ***arr) {
+    int count = 1;
+    int token_len = 1;
+    int i = 0;
+    char *p;
+    char *t;
 
-char *remove_by_index(char str[], int i) {
-    str[i] = '\0';
-    return str;
+    p = str;
+    while (*p != '\0') {
+        if (*p == delimiter) count++;
+        p++;
+    }
+
+    *arr = alloc(PCHAR, count);
+    if (*arr == 0) return 1;
+    p = str;
+    while (*p != '\0') {
+        if (*p == delimiter) {
+            (*arr)[i] = alloc(CHAR, token_len);
+            if ((*arr)[i] == 0) return 1;
+            token_len = 0;
+            i++;
+        }
+        p++;
+        token_len++;
+    }
+    (*arr)[i] = alloc(CHAR, token_len);
+    if ((*arr)[i] == 0) return 1;
+    i = 0;
+    p = str;
+    t = ((*arr)[i]);
+    while (*p != '\0') {
+        if (*p != delimiter && *p != '\0') {
+            *t = *p;
+            t++;
+        } else {
+            *t = '\0';
+            i++;
+            t = ((*arr)[i]);
+        }
+        p++;
+    }
+
+    return count;
+}
+
+void remove_item(char *arr, int i, int len) {
+    int j;
+    for (j = i; j < len - 1; j++) arr[j] = arr[j + 1];
 }

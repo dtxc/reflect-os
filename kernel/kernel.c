@@ -8,36 +8,6 @@
 #include "../lib/string.h"
 #include "../lib/mem.h"
 
-typedef enum {
-    CHAR,
-    INT,
-    VOID
-} TYPE;
-
-void* alloc(TYPE t, int n) {
-    void *ptr;
-    switch (t) {
-        case INT: {
-            ptr = (int *) mem_alloc(n * sizeof(int));
-            break;
-        }
-        case CHAR: {
-            ptr = (char *) mem_alloc(n * sizeof(char));
-            break;
-        }
-        case VOID: {
-            ptr = (void *) mem_alloc(n * sizeof(void*));
-        }
-        default: {
-            ptr = (void *) mem_alloc(n * sizeof(void*));
-        }
-    }
-    if (ptr == NULL_POINTER) {
-        print_string("Memory not allocated\n");
-    }
-    return ptr;
-}
-
 void start_kernel() {
     clear_screen();
     print_string("Installing interrupt service routines\n");
@@ -112,23 +82,30 @@ void execute_command(char *input) {
     } else if (compare_string(input, "HELP") == 0) {
         print_string("HALT - stops the system\nCLEAR - clears the screen\nMEMTEST - tests dynamic memory allocation\nECHO <text> - prints text\n");
         print_string(">> ");
-    } else if (startswith(input, "ECHO")) {
-        // for (int i = 0; i < 4; i++){
-        //     input = remove_by_index(input, 0);
-        // }
-        char out[string_length(input)+1];
-        remove_by_index(input, out, 0);
-        char *o = &out[0];
-        for (int i = 0; i < string_length(out); i++) {
-            print_string((o+i));
+    }  else if (compare_string(input, "ECHO") == 0) {
+        print_string("echo: missing argument: text");
+        print_nl();
+        print_string(">> ");
+    } else if (startswith(input, "ECHO ")) {
+        char **arr = 0;
+        int tokens = split(input, ' ', &arr);
+        for (int i = 1; i < tokens; i++) {
+            print_string(arr[i]);
+            print_string(" ");
         }
-        //print_string(out);
         print_nl();
         print_string(">> ");
     }
     else {
         print_string("Unknown command: ");
-        print_string(input);
+        char *ptr = alloc(CHAR, string_length(input));
+        for (int i = 0; i < string_length(input); i++) {
+            ptr[i] = input[i];
+            if (input[i] == *" ") {
+                break;
+            }
+        }
+        print_string(ptr);
         print_string("\n>> ");
     }
 }

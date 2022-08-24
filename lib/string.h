@@ -17,4 +17,7 @@ int find_matches(char str[], char what);
 void split_string(char str[], char delimiter, int n, char arr[]);
 int get_index(char *str, char what);
 char *remove(char *str, char *what);
-char *remove_by_index(char str[], int i);
+void remove_by_index(char str[], char dest[], int i);
+//void split(char *str, char *dest, char delimiter, int n);
+int split(char *str, char delimiter, char ***arr);
+void remove_item(char *arr, int i, int len);

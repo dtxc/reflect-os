@@ -122,6 +122,7 @@ void* merge_current_node_into_previous(dynamic_mem_node_t* current_mem_node) {
             current_mem_node->next->prev = prev_mem_node;
         }
     }
+    return current_mem_node;
 }
 
 void mem_free(void *p) {
@@ -135,4 +136,31 @@ void mem_free(void *p) {
     current_mem_node->used = false;
     current_mem_node = merge_next_node_into_current(current_mem_node);
     merge_current_node_into_previous(current_mem_node);
+}
+
+void* alloc(TYPE t, int n) {
+    void *ptr;
+    switch (t) {
+        case INT: {
+            ptr = (int *) mem_alloc(n * sizeof(int));
+            break;
+        }
+        case CHAR: {
+            ptr = (char *) mem_alloc(n * sizeof(char));
+            break;
+        }
+        case VOID: {
+            ptr = (void *) mem_alloc(n * sizeof(void*));
+        }
+        case PCHAR: {
+            ptr = (char **) mem_alloc(n * sizeof(char*));
+        }
+        default: {
+            ptr = (void *) mem_alloc(n * sizeof(void*));
+        }
+    }
+    if (ptr == NULL_POINTER) {
+        print_string("Memory not allocated\n");
+    }
+    return ptr;
 }
