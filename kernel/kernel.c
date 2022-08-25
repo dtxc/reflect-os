@@ -1,3 +1,5 @@
+// TODO: command history
+
 #include "../cpu/idt.h"
 #include "../cpu/isr.h"
 #include "../cpu/timer.h"
