@@ -16,4 +16,4 @@ x86_64 os based on [this os tutorial](https://github.com/cfenollosa/os-tutorial)
 
 
 ## TODO
-filesystem
+check [kernel.c](https://github.com/thatOneArchUser/test-os/blob/main/kernel/kernel.c#L1)
