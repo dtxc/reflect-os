@@ -1,4 +1,11 @@
-// TODO: command history
+/* TODO:
+        command history
+        register up arrow in keyboard.c
+        interrupt message argument in interrupt command and interrupt message list accessed with "interrupt help"
+        move execute_command in another file
+        beep sound at interrupt exception
+        reboot command
+*/
 
 #include "../cpu/idt.h"
 #include "../cpu/isr.h"
@@ -65,7 +72,7 @@ void execute_command(char *input) {
         print_dynamic_mem();
         print_nl();
         print_string(">> ");
-    } else if (startswith(input, "crash")) {
+    } else if (startswith(input, "interrupt")) {
         asm volatile("int %0" : : "i"(0x0E));
     } else {
         print_string("Unknown command: ");
