@@ -1,10 +1,14 @@
 #include "../cpu/idt.h"
 #include "../cpu/isr.h"
 #include "../cpu/timer.h"
+#include "../drivers/ports.h"
 #include "../drivers/display.h"
 #include "../drivers/keyboard.h"
 #include "../lib/string.h"
 #include "../lib/mem.h"
+#include "kernel.h"
+
+static char *command;
 
 void start_kernel() {
     clear_screen();
@@ -19,82 +23,49 @@ void start_kernel() {
 
     print_string("Initializing dynamic memory\n");
     init_dynamic_mem();
-
     print_string("init_dynamic_mem()\n");
     print_dynamic_node_size();
     print_dynamic_mem();
-    print_nl();
-
-    int *ptr1 = alloc(INT, 5);
-    print_string("int *ptr1 = alloc(5)\n");
-    print_dynamic_mem();
-    print_nl();
-
-    int *ptr2 = alloc(INT, 10);
-    print_string("int *ptr2 = alloc(10)\n");
-    print_dynamic_mem();
-    print_nl();
-
-    mem_free(ptr1);
-    print_string("mem_free(ptr1)\n");
-    print_dynamic_mem();
-    print_nl();
-
-    int *ptr3 = alloc(INT, 2);
-    print_string("int *ptr3 = alloc(2)\n");
-    print_dynamic_mem();
-    print_nl();
-
-    mem_free(ptr2);
-    print_string("mem_free(ptr2)\n");
-    print_dynamic_mem();
-    print_nl();
-
-    mem_free(ptr3);
-    print_string("mem_free(ptr3)\n");
-    print_dynamic_mem();
-    print_nl();
+    test_dynamic_mem();
 
     clear_screen();
     print_string("this is a welcome message\ntype HELP for help\n");
     print_string(">> ");
 }
 
+
 void execute_command(char *input) {
-    if (compare_string(input, "HALT") == 0 || compare_string(input, "EXIT") == 0) {
+    print_nl();
+    save_command(input);
+    if (compare_string(input, "halt") == 0 || compare_string(input, "exit") == 0) {
         print_string("System is going down for halt now!\n");
         asm volatile("hlt");
-    } else if (compare_string(input, "CLEAR") == 0) {
+    } else if (compare_string(input, "clear") == 0) {
         clear_screen();
         print_string(">> ");
-    } else if (compare_string(input, "MEMTEST") == 0) {
-        int *ptr = alloc(INT, 10);
-        print_string("int *ptr = alloc(10)\n");
-        print_dynamic_mem();
-        print_nl();
-        mem_free(ptr);
-        print_string("mem_free(ptr)\n");
-        print_dynamic_mem();
-        print_nl();
+    } else if (compare_string(input, "memtest") == 0) {
+        test_dynamic_mem();
         print_string(">> ");
-    } else if (compare_string(input, "HELP") == 0) {
-        print_string("HALT - stops the system\nCLEAR - clears the screen\nMEMTEST - tests dynamic memory allocation\nECHO <text> - prints text\n");
+    } else if (compare_string(input, "help") == 0) {
+        print_string("halt - stops the system\nclear - clears the screen\nmemtest - tests dynamic memory allocation\necho <text> - prints text\nprintmem - prints dynamic memory allocation");
         print_string(">> ");
-    }  else if (compare_string(input, "ECHO") == 0) {
-        print_string("echo: missing argument: text");
-        print_nl();
-        print_string(">> ");
-    } else if (startswith(input, "ECHO ")) {
+    } else if (startswith(input, "echo")) {
         char **arr = 0;
         int tokens = split(input, ' ', &arr);
         for (int i = 1; i < tokens; i++) {
             print_string(arr[i]);
             print_string(" ");
+            mem_free(arr[i]);
         }
         print_nl();
         print_string(">> ");
-    }
-    else {
+    } else if (compare_string(input, "printmem") == 0) {
+        print_dynamic_mem();
+        print_nl();
+        print_string(">> ");
+    } else if (startswith(input, "crash")) {
+        asm volatile("int %0" : : "i"(0x0E));
+    } else {
         print_string("Unknown command: ");
         char *ptr = alloc(CHAR, string_length(input));
         for (int i = 0; i < string_length(input); i++) {
@@ -104,6 +75,18 @@ void execute_command(char *input) {
             }
         }
         print_string(ptr);
+        mem_free(ptr);
         print_string("\n>> ");
+    }
+}
+
+char *get_previous_command() {
+    return command;
+}
+
+void save_command(char *cmd) {
+    command = null;
+    for (int i = 0; i < string_length(cmd); i++) {
+        append(command, cmd[i]);
     }
 }
