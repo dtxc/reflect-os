@@ -13,3 +13,7 @@ x86_64 os based on [this os tutorial](https://github.com/cfenollosa/os-tutorial)
 
 ### building
 `make build && make run`
+
+
+## TODO
+filesystem
