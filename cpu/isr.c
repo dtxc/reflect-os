@@ -110,6 +110,8 @@ char *exception_messages[] = {
 };
 
 void isr_handler(registers_t *r) {
+    print_string("-----beginning of crash-----");
+    print_nl();
     print_string("received interrupt: ");
     char s[3];
     int_to_string(r->int_no, s);
@@ -117,6 +119,10 @@ void isr_handler(registers_t *r) {
     print_nl();
     print_string(exception_messages[r->int_no]);
     print_nl();
+    print_string("Halting system...");
+    print_nl();
+    print_string("--------end of crash--------");
+    asm volatile("hlt");
 }
 
 void register_interrupt_handler(uint8_t n, isr_t handler) {
