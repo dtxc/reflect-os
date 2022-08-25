@@ -110,6 +110,7 @@ char *exception_messages[] = {
 };
 
 void isr_handler(registers_t *r) {
+    clear_screen();
     print_string("-----beginning of crash-----");
     print_nl();
     print_string("received interrupt: ");
