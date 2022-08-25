@@ -56,7 +56,14 @@ void execute_command(char *input) {
         test_dynamic_mem();
         print_string(">> ");
     } else if (compare_string(input, "help") == 0) {
-        print_string("halt - stops the system\nclear - clears the screen\nmemtest - tests dynamic memory allocation\necho <text> - prints text\nprintmem - prints dynamic memory allocation");
+        print_string(
+            "halt - stops the system\n"
+            "clear - clears the screen\n"
+            "memtest - tests dynamic memory allocation\n"
+            "echo <text> - prints text\n"
+            "printmem - prints dynamic memory allocation\n"
+            "interrupt - triggers exception interrupt with code 0x14 (reserved)\n"
+        );
         print_string(">> ");
     } else if (startswith(input, "echo")) {
         char **arr = 0;
@@ -73,7 +80,7 @@ void execute_command(char *input) {
         print_nl();
         print_string(">> ");
     } else if (startswith(input, "interrupt")) {
-        asm volatile("int %0" : : "i"(0x0E));
+        asm volatile("int %0" : : "i"(0x14));
     } else {
         print_string("Unknown command: ");
         char *ptr = alloc(CHAR, string_length(input));
