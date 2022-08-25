@@ -81,7 +81,7 @@ int get_index(char *str, char what) {
     return string_length(str) + 1;
 }
 
-int split(char *str, char delimiter, char ***arr) {
+int split(char *str, char delimiter, char ***dest) {
     int count = 1;
     int token_len = 1;
     int i = 0;
@@ -94,24 +94,24 @@ int split(char *str, char delimiter, char ***arr) {
         p++;
     }
 
-    *arr = alloc(PCHAR, count);
-    if (*arr == 0) return 0;
+    *dest = alloc(PCHAR, count);
+    if (*dest == 0) return 1;
     p = str;
     while (*p != '\0') {
         if (*p == delimiter) {
-            (*arr)[i] = alloc(CHAR, token_len);
-            if ((*arr)[i] == 0) return 0;
+            (*dest)[i] = alloc(CHAR, token_len);
+            if ((*dest)[i] == 0) return 1;
             token_len = 0;
             i++;
         }
         p++;
         token_len++;
     }
-    (*arr)[i] = alloc(CHAR, token_len);
-    if ((*arr)[i] == 0) return 0;
+    (*dest)[i] = alloc(CHAR, token_len);
+    if ((*dest)[i] == 0) return 1;
     i = 0;
     p = str;
-    t = ((*arr)[i]);
+    t = ((*dest)[i]);
     while (*p != '\0') {
         if (*p != delimiter && *p != '\0') {
             *t = *p;
@@ -119,7 +119,7 @@ int split(char *str, char delimiter, char ***arr) {
         } else {
             *t = '\0';
             i++;
-            t = ((*arr)[i]);
+            t = ((*dest)[i]);
         }
         p++;
     }
@@ -130,4 +130,13 @@ int split(char *str, char delimiter, char ***arr) {
 void remove_item(char *arr, int i, int len) {
     int j;
     for (j = i; j < len - 1; j++) arr[j] = arr[j + 1];
+}
+
+char *to_lowercase(char *str) {
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (str[i] >= 'A' && str[i] <= 'Z') {
+            str[i] = str[i] + 32;
+        }
+    }
+    return str;
 }
