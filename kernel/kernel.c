@@ -1,5 +1,4 @@
 /* TODO:
-        rename os to theroid (suggested by archisha69)
         command history
         register up arrow in keyboard.c
         interrupt message argument in interrupt command and interrupt message list accessed with "interrupt help"
@@ -39,7 +38,7 @@ void start_kernel() {
     test_dynamic_mem();
 
     clear_screen();
-    print_string("this is a welcome message\ntype HELP for help\n");
+    print_string("Welcome to theroid os!\ntype help for a command list\n");
     print_string(">> ");
 }
 
