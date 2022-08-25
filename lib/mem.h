@@ -14,6 +14,7 @@ typedef enum {
 
 void memory_copy(uint8_t* source, uint8_t* dest, uint32_t nbytes);
 void init_dynamic_mem();
+void test_dynamic_mem();
 void print_dynamic_node_size();
 void print_dynamic_mem();
 void *mem_alloc(size_t size);
