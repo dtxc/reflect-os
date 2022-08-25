@@ -1,4 +1,5 @@
 /* TODO:
+        rename os to theroid (suggested by archisha69)
         command history
         register up arrow in keyboard.c
         interrupt message argument in interrupt command and interrupt message list accessed with "interrupt help"
