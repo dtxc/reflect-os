@@ -19,5 +19,6 @@ void split_string(char str[], char delimiter, int n, char arr[]);
 int get_index(char *str, char what);
 char *remove(char *str, char *what);
 void remove_by_index(char str[], char dest[], int i);
-int split(char *str, char delimiter, char ***arr);
+int split(char *str, char delimiter, char ***dest);
 void remove_item(char *arr, int i, int len);
+char *to_lowercase(char *str);
