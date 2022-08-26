@@ -7,15 +7,20 @@
 #include "../kernel/kernel.h"
 #include "../lib/mem.h"
 
+#define HOME 0x47
+#define END 0x4F
+#define SYSRQ 0x54
 #define BACKSPACE 0x0E
 #define ENTER 0x1C
-#define UP_ARROW 0x48
-#define DOWN_ARROW 0x50
 #define SHIFT 0x2A
 #define RSHIFT 0x36
+#define CAPS_LOCK 0x3A
 #define SHIFT_RELEASE 0xAA 
 #define RSHIFT_RELEASE 0xB6
-#define CAPS_LOCK 0x3A
+#define UP_ARROW 0x48
+#define DOWN_ARROW 0x50
+#define RIGHT_ARROW 0x4D
+#define LEFT_ARROW 0x4B
 
 static char key_buffer[256];
 static bool shift;
@@ -45,6 +50,12 @@ static void keyboard_callback(registers_t *regs) {
     status = port_byte_in(0x64);
     if (status & 0x01) {
         scancode = port_byte_in(0x60);
+        if (scancode == SYSRQ) {
+            reboot();
+        }
+//         if (scancode == HOME) {
+//             set_cursor(get_cursor() - string_length(key_buffer)*2);
+//         }
         if (scancode == SHIFT || scancode == RSHIFT) {
             shift = true;
         }
