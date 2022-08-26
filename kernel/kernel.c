@@ -1,5 +1,4 @@
 /* TODO:
-        interrupt message argument in interrupt command and interrupt message list accessed with "interrupt help"
         move execute_command in another file
         beep sound at interrupt exception
         reboot command
