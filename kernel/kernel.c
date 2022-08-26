@@ -1,6 +1,4 @@
 /* TODO:
-        command history
-        register up arrow in keyboard.c
         interrupt message argument in interrupt command and interrupt message list accessed with "interrupt help"
         move execute_command in another file
         beep sound at interrupt exception
@@ -17,7 +15,7 @@
 #include "../lib/mem.h"
 #include "kernel.h"
 
-static char *command;
+static char command[256];
 
 void start_kernel() {
     clear_screen();
@@ -81,17 +79,15 @@ void execute_command(char *input) {
         print_string(">> ");
     } else if (startswith(input, "interrupt")) {
         asm volatile("int %0" : : "i"(0x14));
-    } else {
+    } else if (compare_string(input, "command") == 0) {
+        print_string(get_previous_command());
+        print_nl();
+        print_string(">> ");
+    }
+    else {
         print_string("Unknown command: ");
-        char *ptr = alloc(CHAR, string_length(input));
-        for (int i = 0; i < string_length(input); i++) {
-            ptr[i] = input[i];
-            if (input[i] == *" ") {
-                break;
-            }
-        }
-        print_string(ptr);
-        mem_free(ptr);
+        print_string(input);
+        print_nl();
         print_string("\n>> ");
     }
 }
@@ -100,8 +96,8 @@ char *get_previous_command() {
     return command;
 }
 
-void save_command(char *cmd) {
-    command = null;
+void save_command(char cmd[]) {
+    command[0] = '\0';
     for (int i = 0; i < string_length(cmd); i++) {
         append(command, cmd[i]);
     }
