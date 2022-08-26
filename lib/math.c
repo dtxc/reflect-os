@@ -78,6 +78,6 @@ float exp(int x) {
     return pow(e, x);
 }
 
-uint64_t perm(uint16_t x, uint16_t y) {
-    return factorial(x)/(factorial(x-y));
-}
+// uint64_t perm(uint16_t x, uint16_t y) {
+//     return factorial(x)/(factorial(x-y));
+// }
