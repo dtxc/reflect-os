@@ -1,7 +1,6 @@
 /* TODO:
-        move execute_command in another file
         beep sound at interrupt exception
-        reboot command
+        filesystem
 */
 
 #include "../cpu/idt.h"
@@ -15,6 +14,19 @@
 #include "kernel.h"
 
 static char command[256];
+
+void reboot() {
+    unsigned temp;
+    do {
+        temp = port_byte_in(0x64);
+        if ((temp & 0x01) != 0) {
+            (void)port_byte_in(0x60);
+            continue;
+        } 
+    } while ((temp & 0x02) != 0);
+    port_byte_out(0x64, 0xFE);
+    while (1);
+}
 
 void start_kernel() {
     clear_screen();
@@ -45,6 +57,8 @@ void execute_command(char *input) {
     save_command(input);
     if (compare_string(input, "halt") == 0 || compare_string(input, "exit") == 0) {
         print_string("System is going down for halt now!\n");
+        print_string("Disabling interrupts...");
+        asm volatile("cli");
         asm volatile("hlt");
     } else if (compare_string(input, "clear") == 0) {
         clear_screen();
@@ -60,6 +74,7 @@ void execute_command(char *input) {
             "echo <text> - prints text\n"
             "printmem - prints dynamic memory allocation\n"
             "interrupt - triggers exception interrupt with code 0x14 (reserved)\n"
+            "reboot - reboots the system by causing a triple cpu fault\n"
         );
         print_string(">> ");
     } else if (startswith(input, "echo")) {
@@ -78,15 +93,15 @@ void execute_command(char *input) {
         print_string(">> ");
     } else if (startswith(input, "interrupt")) {
         asm volatile("int %0" : : "i"(0x14));
-    } else if (compare_string(input, "command") == 0) {
-        print_string(get_previous_command());
-        print_nl();
-        print_string(">> ");
+    } else if (compare_string(input, "reboot") == 0) {
+        //asm volatile("jmp far ptr 0FFFFh:0");
+        reboot();
+    } else if (compare_string(input, "q") == 0) {
+        print_string("\33[2K");
     }
     else {
         print_string("Unknown command: ");
         print_string(input);
-        print_nl();
         print_string("\n>> ");
     }
 }
