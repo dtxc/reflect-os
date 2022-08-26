@@ -136,7 +136,6 @@ void irq_handler(registers_t *r) {
         handler(r);
     }
 
-    // EOI
     if (r->int_no >= 40) {
         port_byte_out(0xA0, 0x20);
     }
