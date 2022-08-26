@@ -30,4 +30,4 @@ float tanh(int x);
 uint64_t factorial(uint16_t x);
 float pow(float x, int y);
 float exp(int x);
-uint64_t perm(uint16_t x, uint16_t y);
+//uint64_t perm(uint16_t x, uint16_t y);
