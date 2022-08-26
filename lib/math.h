@@ -2,6 +2,9 @@
 
 #include <stdint.h>
 
+#define e 2.71828182845
+#define pi 3.14159265359
+
 typedef struct {
     float Re, Im;
 } complex32_t;
@@ -9,9 +12,6 @@ typedef struct {
 typedef struct {
     double Re, Im;
 } complex64_t;
-
-const float e = 2.71828182845;
-const float pi = 3.14159265359;
 
 float add(float x, float y);
 float sub(float x, float y);
