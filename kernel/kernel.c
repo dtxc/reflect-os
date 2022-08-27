@@ -1,7 +1,6 @@
 /* TODO:
         beep sound at interrupt exception
         left/right arrow support
-        filesystem
 */
 
 #include "../cpu/idt.h"
