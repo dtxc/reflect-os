@@ -1,15 +1,11 @@
-#include "display.h"
-#include "ports.h"
-#include <stdint.h>
-#include "../lib/mem.h"
-#include "../lib/string.h"
+#include "../kernel/kernel.h"
 
 void set_cursor(int offset) {
     offset /= 2;
     port_byte_out(REG_SCREEN_CTRL, 14);
-    port_byte_out(REG_SCREEN_DATA, (unsigned char) (offset >> 8));
+    port_byte_out(REG_SCREEN_DATA, (uchar) (offset >> 8));
     port_byte_out(REG_SCREEN_CTRL, 15);
-    port_byte_out(REG_SCREEN_DATA, (unsigned char) (offset & 0xff));
+    port_byte_out(REG_SCREEN_DATA, (uchar) (offset & 0xff));
 }
 
 int get_cursor() {
@@ -33,15 +29,15 @@ int move_offset_to_new_line(int offset) {
 }
 
 void set_char_at_video_memory(char character, int offset) {
-    uint8_t *vidmem = (uint8_t *) VIDEO_ADDRESS;
+    u8 *vidmem = (u8*) VIDEO_ADDRESS;
     vidmem[offset] = character;
     vidmem[offset + 1] = WHITE_ON_BLACK;
 }
 
 int scroll_ln(int offset) {
     memory_copy(
-            (uint8_t * )(get_offset(0, 1) + VIDEO_ADDRESS),
-            (uint8_t * )(get_offset(0, 0) + VIDEO_ADDRESS),
+            (u8*)(get_offset(0, 1) + VIDEO_ADDRESS),
+            (u8*)(get_offset(0, 0) + VIDEO_ADDRESS),
             MAX_COLS * (MAX_ROWS - 1) * 2
     );
 
