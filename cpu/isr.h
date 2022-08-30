@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdint.h>
+#include "../kernel/core/types.h"
 
 #define IRQ0 32
 #define IRQ1 33
@@ -20,10 +20,10 @@
 #define IRQ15 47
 
 typedef struct {
-    uint32_t ds;
-    uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;
-    uint32_t int_no, err_code;
-    uint32_t eip, cs, eflags, useresp, ss;
+    u32 ds;
+    u32 edi, esi, ebp, esp, ebx, edx, ecx, eax;
+    u32 int_no, err_code;
+    u32 eip, cs, eflags, useresp, ss;
 } registers_t;
 
 typedef void (*isr_t)(registers_t *);
@@ -80,4 +80,4 @@ extern void irq15();
 
 void isr_install();
 void isr_handler(registers_t *r);
-void register_interrupt_handler(uint8_t n, isr_t handler);
+void register_interrupt_handler(u8 n, isr_t handler);
