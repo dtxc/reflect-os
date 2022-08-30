@@ -6,6 +6,7 @@
 #define SYSRQ 0x54
 #define BACKSPACE 0x0E
 #define ENTER 0x1C
+#define DELETE 0x53
 
 #define SHIFT 0x2A
 #define RSHIFT 0x36
