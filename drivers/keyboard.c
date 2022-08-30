@@ -54,7 +54,6 @@ static void keyboard_callback(registers_t *regs) {
             }
             key_buffer[0] = '\0';
         }
-        if (alt && scancode == SHIFT) layout = "dvorak";
         if (scancode == HOME) {
             while (backspace(key_buffer)) set_cursor(get_cursor() - 1);
         }
