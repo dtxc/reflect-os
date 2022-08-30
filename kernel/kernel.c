@@ -1,6 +1,12 @@
 /* TODO:
-        beep sound at interrupt exception
-        left/right arrow support
+        fs:
+            any fs support
+        isr.c:
+            beep sound on interrupt exception
+        keyboard.c:
+            right arrow support
+        math.c:
+            inverse trigs/logs
 */
 
 #include "../cpu/idt.h"
@@ -11,11 +17,13 @@
 #include "../drivers/keyboard.h"
 #include "../lib/string.h"
 #include "../lib/mem.h"
+#include "../lib/math.h"
 #include "kernel.h"
 
 static char command[256];
 
 void reboot() {
+    asm volatile("cli");
     unsigned temp;
     do {
         temp = port_byte_in(0x64);
@@ -27,6 +35,12 @@ void reboot() {
     port_byte_out(0x64, 0xFE);
     while (1);
 }
+
+void shutdown() {
+    for (char *q = "Shutdown"; *q; ++q) port_byte_out(0x8900, *q);
+    port_byte_out(0xf4, 0x00); //if above function fails
+}
+    
 
 void start_kernel() {
     clear_screen();
@@ -41,7 +55,6 @@ void start_kernel() {
 
     print_string("Initializing dynamic memory\n");
     init_dynamic_mem();
-    print_string("init_dynamic_mem()\n");
     print_dynamic_node_size();
     print_dynamic_mem();
     test_dynamic_mem();
@@ -55,17 +68,12 @@ void start_kernel() {
 void execute_command(char *input) {
     print_nl();
     save_command(input);
-    if (compare_string(input, "halt") == 0 || compare_string(input, "exit") == 0) {
-        print_string("System is going down for halt now!\n");
-        print_string("Disabling interrupts...");
-        asm volatile("cli");
-        asm volatile("hlt");
+    if (compare_string(input, "exit") == 0 || compare_string(input, "shutdown") == 0) {
+        shutdown();
     } else if (compare_string(input, "clear") == 0) {
         clear_screen();
-        print_string(">> ");
     } else if (compare_string(input, "memtest") == 0) {
         test_dynamic_mem();
-        print_string(">> ");
     } else if (compare_string(input, "help") == 0) {
         print_string(
             "halt - stops the system\n"
@@ -73,10 +81,9 @@ void execute_command(char *input) {
             "memtest - tests dynamic memory allocation\n"
             "echo <text> - prints text\n"
             "printmem - prints dynamic memory allocation\n"
-            "interrupt - triggers exception interrupt with code 0x14 (reserved)\n"
+            "interrupt - triggers interrupt exception with code 0x14 (reserved)\n"
             "reboot - reboots the system by causing a triple cpu fault\n"
         );
-        print_string(">> ");
     } else if (startswith(input, "echo")) {
         char **arr = 0;
         int tokens = split(input, ' ', &arr);
@@ -86,23 +93,17 @@ void execute_command(char *input) {
             mem_free(arr[i]);
         }
         print_nl();
-        print_string(">> ");
     } else if (compare_string(input, "printmem") == 0) {
         print_dynamic_mem();
         print_nl();
-        print_string(">> ");
     } else if (startswith(input, "interrupt")) {
         asm volatile("int %0" : : "i"(0x14));
     } else if (compare_string(input, "reboot") == 0) {
-        //asm volatile("jmp far ptr 0FFFFh:0");
         reboot();
-    } else if (compare_string(input, "q") == 0) {
-        print_string("\33[2K");
-    }
-    else {
+    } else {
         print_string("Unknown command: ");
         print_string(input);
-        print_string("\n>> ");
+        print_nl();
     }
 }
 
