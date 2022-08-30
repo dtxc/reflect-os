@@ -10,6 +10,7 @@ build: os-image.bin
 	$(RM) drivers/*.o
 	$(RM) cpu/*.o
 	$(RM) lib/*.o
+	$(RM) kernel/core/*.o
 
 kernel.bin: boot/kernel_entry.o ${OBJ_FILES}
 	x86_64-elf-ld -m elf_i386 -o $@ -Ttext 0x1000 $^ --oformat binary
@@ -55,3 +56,4 @@ clean:
 	$(RM) drivers/*.o
 	$(RM) cpu/*.o
 	$(RM) lib/*.o
+	$(RM) kernel/core/*.o
