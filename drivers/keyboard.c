@@ -7,21 +7,6 @@
 #include "../kernel/kernel.h"
 #include "../lib/mem.h"
 
-#define HOME 0x47
-#define END 0x4F
-#define SYSRQ 0x54
-#define BACKSPACE 0x0E
-#define ENTER 0x1C
-#define SHIFT 0x2A
-#define RSHIFT 0x36
-#define CAPS_LOCK 0x3A
-#define SHIFT_RELEASE 0xAA 
-#define RSHIFT_RELEASE 0xB6
-#define UP_ARROW 0x48
-#define DOWN_ARROW 0x50
-#define RIGHT_ARROW 0x4D
-#define LEFT_ARROW 0x4B
-
 static char key_buffer[256];
 static bool shift;
 
@@ -45,27 +30,19 @@ const char sc_ascii[] = {'?', '?', '1', '2', '3', '4', '5', '6',
 
 static void keyboard_callback(registers_t *regs) {
     unsigned char status;
-    unsigned char scancode;
+    uint16_t scancode;
     char release;
     status = port_byte_in(0x64);
     if (status & 0x01) {
         scancode = port_byte_in(0x60);
-        if (scancode == SYSRQ) {
-            reboot();
+        if (scancode == SYSRQ) reboot();
+        if (scancode == HOME) {
+            while (backspace(key_buffer)) set_cursor(get_cursor() - 1);
         }
-//         if (scancode == HOME) {
-//             set_cursor(get_cursor() - string_length(key_buffer)*2);
-//         }
-        if (scancode == SHIFT || scancode == RSHIFT) {
-            shift = true;
-        }
-        if (scancode == SHIFT_RELEASE || scancode == RSHIFT_RELEASE) {
-            shift = false;
-        }
+        if (scancode == SHIFT || scancode == RSHIFT) shift = true;
+        if (scancode == SHIFT_RELEASE || scancode == RSHIFT_RELEASE) shift = false;
         if (scancode == BACKSPACE) {
-            if (backspace(key_buffer)) {
-                print_backspace();
-            }
+            if (backspace(key_buffer)) print_backspace();
         }
         if (scancode == UP_ARROW) {
             if (string_length(key_buffer) != 0) return;
@@ -82,6 +59,9 @@ static void keyboard_callback(registers_t *regs) {
                 key_buffer[0] = '\0';
             }
         }
+        if (scancode == LEFT_ARROW) {
+            if (backspace(key_buffer)) set_cursor(get_cursor()-1);
+        }
         if (scancode == CAPS_LOCK) shift = !shift;
         if (scancode == ENTER) {
             if (string_length(key_buffer) == 0) {
@@ -90,6 +70,7 @@ static void keyboard_callback(registers_t *regs) {
             } else {
                 execute_command(key_buffer);
                 key_buffer[0] = '\0';
+                print_string(">> ");
             }
         }
         if (scancode == 0x47 && shift == true) {
@@ -97,6 +78,7 @@ static void keyboard_callback(registers_t *regs) {
             print_string("?");
         }
         if (scancode <= 57 && sc_ascii[scancode] != '?' && shift == false) {
+            if (string_length(key_buffer) == 256) return;
             char letter = sc_ascii[(int) scancode];
             append(key_buffer, letter);
             char str[2] = {letter, '\0'};
@@ -104,6 +86,7 @@ static void keyboard_callback(registers_t *regs) {
             release = port_byte_in(0x60);
         }
         if (scancode <= 57 && sc_ascii[scancode] != '?' && shift == true) {
+            if (string_length(key_buffer) == 256) return;
             char letter = sc_ascii_shift[(int) scancode];
             append(key_buffer, letter);
             char str[2] = {letter, '\0'};
