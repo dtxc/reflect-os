@@ -1,10 +1,8 @@
-#include <stdbool.h>
-#include <stdint.h>
 #include "mem.h"
 #include "../drivers/display.h"
 #include "../lib/string.h"
 
-void memory_copy(uint8_t *source, uint8_t *dest, uint32_t nbytes) {
+void memory_copy(u8 *source, u8 *dest, u32 nbytes) {
     int i;
     for (i = 0; i < nbytes; i++) {
         *(dest + i) = *(source + i);
@@ -61,7 +59,7 @@ void print_dynamic_mem() {
     print_string("]\n");
 }
 
-void* find_best_mem_block(dynamic_mem_node_t* dynamic_mem, size_t size) {
+void *find_best_mem_block(dynamic_mem_node_t* dynamic_mem, size_t size) {
     dynamic_mem_node_t *best_mem_block = (dynamic_mem_node_t*) NULL_POINTER;
     uint32_t best_mem_block_size = DYNAMIC_MEM_TOTAL_SIZE + 1;
     dynamic_mem_node_t *current_mem_block = dynamic_mem;
@@ -77,7 +75,7 @@ void* find_best_mem_block(dynamic_mem_node_t* dynamic_mem, size_t size) {
     return best_mem_block;
 }
 
-void* mem_alloc(size_t size) {
+void *mem_alloc(size_t size) {
     dynamic_mem_node_t *best_mem_block = (dynamic_mem_node_t*) find_best_mem_block(dynamic_mem_start, size);
 
     if (best_mem_block != NULL_POINTER) {
@@ -98,7 +96,7 @@ void* mem_alloc(size_t size) {
     return NULL_POINTER;
 }
 
-void* merge_next_node_into_current(dynamic_mem_node_t* current_mem_node) {
+void *merge_next_node_into_current(dynamic_mem_node_t* current_mem_node) {
     dynamic_mem_node_t *next_mem_node = current_mem_node->next;
     if (next_mem_node != NULL_POINTER && !next_mem_node->used) {
         current_mem_node->size += current_mem_node->next->size;
@@ -111,7 +109,7 @@ void* merge_next_node_into_current(dynamic_mem_node_t* current_mem_node) {
     return current_mem_node;
 }
 
-void* merge_current_node_into_previous(dynamic_mem_node_t* current_mem_node) {
+void *merge_current_node_into_previous(dynamic_mem_node_t* current_mem_node) {
     dynamic_mem_node_t *prev_mem_node = current_mem_node->prev;
     if (prev_mem_node != NULL_POINTER && !prev_mem_node->used) {
         prev_mem_node->size += current_mem_node->size;
@@ -138,7 +136,7 @@ void mem_free(void *p) {
     merge_current_node_into_previous(current_mem_node);
 }
 
-void* alloc(TYPE t, int n) {
+void* alloc(TYPE_t t, int n) {
     void *ptr;
     switch (t) {
         case INT: {
