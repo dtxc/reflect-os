@@ -1,5 +1,5 @@
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c lib/*.c)
-HEADERS = $(wildcard kernel/*.h  drivers/*.h cpu/*.h lib/*.h)
+C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c lib/*.c kernel/core/*.c)
+HEADERS = $(wildcard kernel/*.h  drivers/*.h cpu/*.h lib/*.h kernel/core/*.h)
 OBJ_FILES = ${C_SOURCES:.c=.o cpu/interrupt.o}
 
 build: os-image.bin
@@ -19,10 +19,10 @@ os-image.bin: boot/mbr.bin kernel.bin
 
 run:
 ifeq ($(shell test -e os-image.bin && echo -n yes),yes)
-	qemu-system-i386 -fda os-image.bin
+	qemu-system-i386 -fda os-image.bin -device isa-debug-exit,iobase=0xf4,iosize=0x04
 else
 	$(MAKE) build 
-	qemu-system-i386 -fda os-image.bin
+	qemu-system-i386 -fda os-image.bin -device isa-debug-exit,iobase=0xf4,iosize=0x04
 endif
 
 echo: os-image.bin
