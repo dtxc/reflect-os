@@ -48,6 +48,14 @@ bool backspace(char s[]) {
     }
 }
 
+bool qq(char s[]) {
+    int len = string_length(s);
+    if (len < 256) {
+        s[len+1] = '\0';
+        return true;
+    } return false;
+}
+
 int compare_string(char s1[], char s2[]) {
     int i;
     for (i = 0; s1[i] == s2[i]; i++) {
@@ -139,4 +147,16 @@ char *to_lowercase(char *str) {
         }
     }
     return str;
+}
+
+int string_to_int(char *str) {
+    int mult = 1;
+    int result = 0;
+    int len = string_length(str);
+
+    for(int i = len-1; i >= 0; i--) {
+        result = result + ((int)str[i] - 48)*mult;
+        mult *= 10;
+    }
+    return result;
 }
