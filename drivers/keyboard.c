@@ -27,7 +27,6 @@ const char sc_ascii[] = {'?', '?', '1', '2', '3', '4', '5', '6',
                          'h', 'j', 'k', 'l', ';', '\'', '`', '?', '\\', 'z', 'x', 'c', 'v',
                          'b', 'n', 'm', ',', '.', '/', '?', '?', '?', ' '};
 
-
 static void keyboard_callback(registers_t *regs) {
     uchar status;
     u16 scancode;
@@ -75,7 +74,7 @@ static void keyboard_callback(registers_t *regs) {
             print_string(get_previous_command());
         }
         if (scancode == DOWN_ARROW) {
-            if (compare_string(key_buffer, get_previous_command()) == 0) {
+            if (compare_string(key_buffer, get_previous_command())) {
                 for (int i = 0; i < string_length(key_buffer); i++) {
                     print_backspace();
                 }
@@ -102,12 +101,8 @@ static void keyboard_callback(registers_t *regs) {
         if (scancode <= 57 && sc_ascii[scancode] != '?') {
             if (string_length(key_buffer) == 256) return;
             char letter;
-            if (compare_string(layout, "qwerty")) {
-                if (shift) letter = sc_ascii_shift[(int) scancode];
-                else letter = sc_ascii[(int) scancode];
-            } else {
-                letter = sc_dvorak[(int) scancode];
-            }
+            if (shift) letter = sc_ascii_shift[(int) scancode];
+            else letter = sc_ascii[(int) scancode];
             append(key_buffer, letter);
             char str[2] = {letter, '\0'};
             print_string(str);
