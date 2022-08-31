@@ -7,25 +7,6 @@
 
 static char command[256];
 
-void reboot() {
-    asm volatile("cli");
-    unsigned temp;
-    do {
-        temp = port_byte_in(0x64);
-        if ((temp & 0x01) != 0) {
-            (void)port_byte_in(0x60);
-            continue;
-        } 
-    } while ((temp & 0x02) != 0);
-    port_byte_out(0x64, 0xFE);
-    while (1);
-}
-
-void shutdown() {
-    for (char *q = "Shutdown"; *q; ++q) port_byte_out(0x8900, *q);
-    port_byte_out(0xf4, 0x00); //if above function fails
-}
-
 void start_kernel() {
     clear_screen();
     print_string("Installing interrupt service routines\n");
@@ -49,15 +30,15 @@ void start_kernel() {
 void execute_command(char *input) {
     print_nl();
     save_command(input);
-    if (compare_string(input, "exit") == 0 || compare_string(input, "shutdown") == 0) {
+    if (compare_string(input, "exit") || compare_string(input, "shutdown")) {
         shutdown();
-    } else if (compare_string(input, "clear") == 0) {
+    } else if (compare_string(input, "clear")) {
         clear_screen();
         print_string(">> ");
-    } else if (compare_string(input, "memtest") == 0) {
+    } else if (compare_string(input, "memtest")) {
         test_dynamic_mem();
         print_string(">> ");
-    } else if (compare_string(input, "help") == 0) {
+    } else if (compare_string(input, "help")) {
         print_string(
             "halt - stops the system\n"
             "clear - clears the screen\n"
@@ -78,13 +59,13 @@ void execute_command(char *input) {
         }
         print_nl();
         print_string(">> ");
-    } else if (compare_string(input, "printmem") == 0) {
+    } else if (compare_string(input, "printmem")) {
         print_dynamic_mem();
         print_nl();
         print_string(">> ");
     } else if (startswith(input, "interrupt")) {
         asm volatile("int %0" : : "i"(0x14));
-    } else if (compare_string(input, "reboot") == 0) {
+    } else if (compare_string(input, "reboot")) {
         reboot();
     } else {
         print_string("Unknown command: ");

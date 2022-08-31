@@ -61,12 +61,12 @@ bool qq(char s[]) {
     } return false;
 }
 
-int compare_string(char s1[], char s2[]) {
-    int i;
-    for (i = 0; s1[i] == s2[i]; i++) {
-        if (s1[i] == '\0') return 0;
+bool compare_string(char s1[], char s2[]) {
+    if (string_length(s1) != string_length(s2)) return false;
+    for (int i = 0; i < string_length(s1); i++) {
+        if (s1[i] != s2[i]) return false;
     }
-    return s1[i] - s2[i];
+    return true;
 }
 
 bool startswith(char str[], char what[]) {

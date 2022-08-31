@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include "hal/hal.h"
 #include "core/ports.h"
 #include "core/types.h"
 #include "../cpu/idt.h"
@@ -22,8 +23,7 @@ typedef enum {
     ROOT_MOUNT_FAILED
 } panicreason_t;
 
-void reboot();
-void shutdown();
+
 void execute_command(char *input);
 char *get_previous_command();
 void save_command(char *command);

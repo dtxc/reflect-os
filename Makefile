@@ -1,5 +1,5 @@
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c lib/*.c kernel/core/*.c)
-HEADERS = $(wildcard kernel/*.h  drivers/*.h cpu/*.h lib/*.h kernel/core/*.h)
+C_SOURCES = $(shell find . -name "*.c")
+HEADERS = $(shell find . -name ".*h")
 OBJ_FILES = ${C_SOURCES:.c=.o cpu/interrupt.o}
 
 build: os-image.img
@@ -33,14 +33,9 @@ endif
 	ndisasm -b 32 $< > $@
 
 clean:
+	$(RM) $(shell find . -name "*.o")
 	$(RM) kernel.img
-	$(RM) *.o *.dis *.elf
-	$(RM) kernel/*.o
-	$(RM) boot/*.o boot/*.bin
-	$(RM) drivers/*.o
-	$(RM) cpu/*.o
-	$(RM) lib/*.o
-	$(RM) kernel/core/*.o
+	$(RM) boot/*.bin
 
 compress:
 ifeq ($(shell test -e os-image.img && echo -n yes),yes)

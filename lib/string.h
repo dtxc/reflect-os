@@ -17,7 +17,7 @@ void int_to_string(int n, char str[]);
 bool backspace(char s[]);
 bool qq(char s[]);
 void append(char s[], char n);
-int compare_string(char s1[], char s2[]);
+bool compare_string(char s1[], char s2[]);
 bool startswith(char str[], char what[]);
 int find_matches(char str[], char what);
 void split_string(char str[], char delimiter, int n, char arr[]);
