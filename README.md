@@ -17,7 +17,3 @@ x86_64 os based on [this os tutorial](https://github.com/cfenollosa/os-tutorial)
 `make build`
 
 `make run` to run the os image
-
-
-## TODO
-check [kernel.c](https://github.com/thatOneArchUser/test-os/blob/main/kernel/kernel.c#L1)
