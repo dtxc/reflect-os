@@ -1,12 +1,6 @@
-/* TODO:
-        fs:
-            any fs support
-        isr.c:
-            beep sound on interrupt exception
-        keyboard.c:
-            right arrow support and clipboard
-        math.c:
-            inverse trigs/logs
+/*
+    Copyright (c) 2022 thatOneArchUser
+    All rights reserverd
 */
 
 #include "kernel.h"
@@ -45,9 +39,6 @@ void start_kernel() {
 
     print_string("Initializing dynamic memory\n");
     init_dynamic_mem();
-    print_dynamic_node_size();
-    print_dynamic_mem();
-    test_dynamic_mem();
 
     clear_screen();
     print_string("Welcome to theroid os!\ntype help for a command list\n");

@@ -1,9 +1,15 @@
+/*
+    Copyright (c) 2022 thatOneArchUser
+    All rights reserverd
+*/
+
 #include "../kernel/kernel.h"
 
 static char key_buffer[256];
 static bool shift;
 static bool alt;
 static bool ctrl;
+static char *layout = "qwerty";
 
 const char *sc_name[] = {"ERROR", "Esc", "1", "2", "3", "4", "5", "6",
                          "7", "8", "9", "0", "-", "=", "Backspace", "Tab", "Q", "W", "E",
@@ -21,6 +27,12 @@ const char sc_ascii[] = {'?', '?', '1', '2', '3', '4', '5', '6',
                          'u', 'i', 'o', 'p', '[', ']', '?', '?', 'a', 's', 'd', 'f', 'g',
                          'h', 'j', 'k', 'l', ';', '\'', '`', '?', '\\', 'z', 'x', 'c', 'v',
                          'b', 'n', 'm', ',', '.', '/', '?', '?', '?', ' '};
+const char sc_dvorak[] = {'?', '?', '1', '2', '3', '4', '5', '6',
+                         '7', '8', '9', '0', '[', ']', '?', '?', '\'', ',', '.', 'p', 'y',
+                         'f', 'g', 'c', 'r', 'l', '/', '=', '?', '?', 'a', 'o', 'e', 'u',
+                         'i', 'd', 'h', 't', 'n', 's', '-', '?', '\\', ';', 'q', 'j', 'k',
+                         'x', 'b', 'm', 'w', 'v', 'z', '?', '?', '?', ' '};
+const char sc_dvorak_shift[58];
 
 
 static void keyboard_callback(registers_t *regs) {
@@ -40,7 +52,7 @@ static void keyboard_callback(registers_t *regs) {
             clipboard[0] = '\0';
             for (int i = 0; i < string_length(key_buffer); i++) clipboard[i] = key_buffer[i];
         }
-        if (scancode == 0x2F && ctrl) { //paste
+        if (scancode == 0x2F && ctrl) { //pate
             for (int i = 0; string_length(key_buffer) < 256 && i < string_length(key_buffer); i++) {
                 append(key_buffer, clipboard[i]);
                 print_string(&clipboard[i]);
@@ -54,6 +66,7 @@ static void keyboard_callback(registers_t *regs) {
             }
             key_buffer[0] = '\0';
         }
+        if (alt && scancode == SHIFT) layout = "dvorak";
         if (scancode == HOME) {
             while (backspace(key_buffer)) set_cursor(get_cursor() - 1);
         }
@@ -97,8 +110,12 @@ static void keyboard_callback(registers_t *regs) {
         if (scancode <= 57 && sc_ascii[scancode] != '?') {
             if (string_length(key_buffer) == 256) return;
             char letter;
-            if (shift) letter = sc_ascii_shift[(int) scancode];
-            else letter = sc_ascii[(int) scancode];
+            if (compare_string(layout, "qwerty")) {
+                if (shift) letter = sc_ascii_shift[(int) scancode];
+                else letter = sc_ascii[(int) scancode];
+            } else {
+                letter = sc_dvorak[(int) scancode];
+            }
             append(key_buffer, letter);
             char str[2] = {letter, '\0'};
             print_string(str);

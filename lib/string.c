@@ -1,3 +1,8 @@
+/*
+    Copyright (c) 2022 thatOneArchUser
+    All rights reserverd
+*/
+
 #include <stdint.h>
 #include <stdbool.h>
 #include "mem.h"
@@ -159,4 +164,10 @@ int string_to_int(char *str) {
         mult *= 10;
     }
     return result;
+}
+
+int arr_len(char **arr) {
+    int i;
+    while (arr[i] != (void *)0) i++;
+    return i;
 }

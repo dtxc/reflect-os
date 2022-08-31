@@ -1,3 +1,8 @@
+/*
+    Copyright (c) 2022 thatOneArchUser
+    All rights reserverd
+*/
+
 #pragma once
 
 #include <stdint.h>
@@ -5,7 +10,6 @@
 
 #define low_16(address) (uint16_t)((address) & 0xFFFF)
 #define high_16(address) (uint16_t)(((address) >> 16) & 0xFFFF)
-#define null 0
 
 int string_length(char *s);
 void reverse(char s[]);
@@ -24,3 +28,4 @@ int split(char *str, char delimiter, char ***dest);
 void remove_item(char *arr, int i, int len);
 char *to_lowercase(char *str);
 int string_to_int(char *str);
+int arr_len(char **arr);

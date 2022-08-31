@@ -1,9 +1,15 @@
+/*
+    Copyright (c) 2022 thatOneArchUser
+    All rights reserverd
+*/
+
 #pragma once
 
 #include "core/ports.h"
 #include "core/types.h"
 #include "../cpu/idt.h"
 #include "../cpu/isr.h"
+#include "../cpu/timer.h"
 #include "../lib/mem.h"
 #include "../lib/string.h"
 #include "../drivers/display.h"

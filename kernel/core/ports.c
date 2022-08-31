@@ -1,3 +1,8 @@
+/*
+    Copyright (c) 2022 thatOneArchUser
+    All rights reserverd
+*/
+
 #include "ports.h"
 
 uchar port_byte_in(u16 port) {

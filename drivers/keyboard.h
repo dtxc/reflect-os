@@ -1,3 +1,8 @@
+/*
+    Copyright (c) 2022 thatOneArchUser
+    All rights reserverd
+*/
+
 #pragma once
 
 #define HOME 0x47
@@ -7,6 +12,10 @@
 #define BACKSPACE 0x0E
 #define ENTER 0x1C
 #define DELETE 0x53
+#define ALT 0x38
+#define ALT_RELEASE 0xB8
+#define CTRL 0x1D
+#define CTRL_RELEASE 0x9D
 
 #define SHIFT 0x2A
 #define RSHIFT 0x36
@@ -29,5 +38,10 @@
 #define FUNCTION8 0x42
 #define FUNCTION9 0x43
 #define FUNCTION10 0x44
+
+/*
+#define POWER 0xE05E
+#define POWER1 0xE0DE
+*/
 
 void init_keyboard();

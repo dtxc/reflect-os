@@ -1,3 +1,8 @@
+/*
+    Copyright (c) 2022 thatOneArchUser
+    All rights reserverd
+*/
+
 #include "../kernel/kernel.h"
 
 isr_t interrupt_handlers[256];
