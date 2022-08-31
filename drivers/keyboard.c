@@ -9,7 +9,6 @@ static char key_buffer[256];
 static bool shift;
 static bool alt;
 static bool ctrl;
-static char *layout = "qwerty";
 
 const char *sc_name[] = {"ERROR", "Esc", "1", "2", "3", "4", "5", "6",
                          "7", "8", "9", "0", "-", "=", "Backspace", "Tab", "Q", "W", "E",
@@ -27,12 +26,6 @@ const char sc_ascii[] = {'?', '?', '1', '2', '3', '4', '5', '6',
                          'u', 'i', 'o', 'p', '[', ']', '?', '?', 'a', 's', 'd', 'f', 'g',
                          'h', 'j', 'k', 'l', ';', '\'', '`', '?', '\\', 'z', 'x', 'c', 'v',
                          'b', 'n', 'm', ',', '.', '/', '?', '?', '?', ' '};
-const char sc_dvorak[] = {'?', '?', '1', '2', '3', '4', '5', '6',
-                         '7', '8', '9', '0', '[', ']', '?', '?', '\'', ',', '.', 'p', 'y',
-                         'f', 'g', 'c', 'r', 'l', '/', '=', '?', '?', 'a', 'o', 'e', 'u',
-                         'i', 'd', 'h', 't', 'n', 's', '-', '?', '\\', ';', 'q', 'j', 'k',
-                         'x', 'b', 'm', 'w', 'v', 'z', '?', '?', '?', ' '};
-const char sc_dvorak_shift[58];
 
 
 static void keyboard_callback(registers_t *regs) {
@@ -52,7 +45,7 @@ static void keyboard_callback(registers_t *regs) {
             clipboard[0] = '\0';
             for (int i = 0; i < string_length(key_buffer); i++) clipboard[i] = key_buffer[i];
         }
-        if (scancode == 0x2F && ctrl) { //pate
+        if (scancode == 0x2F && ctrl) { //paste
             for (int i = 0; string_length(key_buffer) < 256 && i < string_length(key_buffer); i++) {
                 append(key_buffer, clipboard[i]);
                 print_string(&clipboard[i]);
@@ -66,7 +59,6 @@ static void keyboard_callback(registers_t *regs) {
             }
             key_buffer[0] = '\0';
         }
-        if (alt && scancode == SHIFT) layout = "dvorak";
         if (scancode == HOME) {
             while (backspace(key_buffer)) set_cursor(get_cursor() - 1);
         }
