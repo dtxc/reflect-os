@@ -9,8 +9,6 @@ x86_64 os based on [this os tutorial](https://github.com/cfenollosa/os-tutorial)
 >
 > + x86_64-elf-gcc
 >
-> + i386-elf-gdb (for debugging)
->
 > + qemu
 
 ### building
