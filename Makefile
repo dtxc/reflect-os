@@ -15,6 +15,7 @@ run:
 ifeq ($(shell test -e os-image.img && echo -n yes),yes)
 	qemu-system-i386 -fda os-image.img -device isa-debug-exit,iobase=0xf4,iosize=0x04
 else
+	echo "os image not found. Building os-image.img..."
 	$(MAKE) build 
 	qemu-system-i386 -fda os-image.img -device isa-debug-exit,iobase=0xf4,iosize=0x04
 endif
