@@ -14,7 +14,9 @@ x86_64 os based on [this os tutorial](https://github.com/cfenollosa/os-tutorial)
 > + qemu
 
 ### building
-`make run`
+`make build`
+
+`make run` to run the os image
 
 
 ## TODO
