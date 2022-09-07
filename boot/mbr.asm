@@ -34,7 +34,6 @@ load_kernel:
 [bits 32]
 BEGIN_32BIT:
     mov ebx, MSG_32BIT_MODE
-    call print32
     call KERNEL_OFFSET
     jmp $
 

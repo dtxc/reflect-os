@@ -1,6 +1,6 @@
 C_SOURCES = $(shell find . -name "*.c")
 HEADERS = $(shell find . -name ".*h")
-OBJ_FILES = ${C_SOURCES:.c=.o cpu/interrupt.o}
+OBJ_FILES = ${C_SOURCES:.c=.o kernel/include/interrupt.o}
 
 build: os-image.img
 	$(MAKE) clean
@@ -21,7 +21,7 @@ else
 endif
 
 %.o: %.c ${HEADERS}
-	x86_64-elf-gcc -g -m32 -ffreestanding -c $< -o $@
+	x86_64-elf-gcc -I ./kernel/include -g -m32 -ffreestanding -c $< -o $@
 
 %.o: %.asm
 	nasm $< -f elf -o $@

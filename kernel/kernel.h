@@ -5,26 +5,15 @@
 
 #pragma once
 
-#include "hal/hal.h"
-#include "core/ports.h"
-#include "core/types.h"
-#include "../cpu/idt.h"
-#include "../cpu/isr.h"
-#include "../cpu/timer.h"
-#include "../lib/mem.h"
-#include "../lib/string.h"
-#include "../drivers/display.h"
-#include "../drivers/keyboard.h"
-
 static char clipboard[256];
 
 typedef enum {
     INTERRUPT_EXCEPTION,
-    ROOT_MOUNT_FAILED
+    ROOT_MOUNT_FAILED,
+    MANUALLY_INITIATED_PANIC
 } panicreason_t;
 
 
 void execute_command(char *input);
 char *get_previous_command();
-void save_command(char *command);
 void panic(panicreason_t reason, char *message);
