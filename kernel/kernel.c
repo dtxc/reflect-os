@@ -19,18 +19,10 @@
 static char command[256];
 
 void start_kernel() {
-    print_string("Installing interrupt service routines\n");
     isr_install();
-
-    print_string("Enabling external interrupts\n");
     asm volatile("sti");
-
-    print_string("Initializing keyboard\n");
     init_keyboard();
-
-    print_string("Initializing dynamic memory\n");
     init_dynamic_mem();
-
     clear_screen();
     print_string("Welcome to theroid os!\ntype help for a command list\n");
     print_string(">> ");
@@ -74,8 +66,6 @@ void execute_command(char *input) {
         panic(MANUALLY_INITIATED_PANIC, "e");
     } else if (compare_string(input, "reboot")) {
         reboot();
-    } else if (compare_string(input, "qw")) {
-        asm volatile("int %0" : : "i"(0x14));
     } else {
         print_string("Unknown command: ");
         print_string(input);
