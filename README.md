@@ -6,7 +6,7 @@ x86_64 os based on [this os tutorial](https://github.com/cfenollosa/os-tutorial)
 + dynamic memory
 
 ## currently working on
-+ vfs native driver
++ vfs driver
 + multi threading and scheduling 
 + user mode
 
