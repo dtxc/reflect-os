@@ -3,7 +3,7 @@
     All rights reserverd
 */
 
-#include "mem.h"
+#include "mem.h"  //i dont use <> in includes because clangd gets confused
 #include "idt.h"
 #include "isr.h"
 #include "rand.h"
