@@ -1,12 +1,16 @@
 C_SOURCES = $(shell find . -name "*.c")
-HEADERS = $(shell find . -name ".*h")
-OBJ_FILES = ${C_SOURCES:.c=.o kernel/include/interrupt.o}
+HEADERS = $(shell find . -name "*.h")
+ASM_FILES = $(shell find asm -name "*.asm")
+OBJ_FILES = ${C_SOURCES:.c=.o \
+	asm/interrupt.o \
+	asm/util.o \
+	asm/disk_io.o}
 
 build: os-image.img
 	$(MAKE) clean
 
 kernel.img: boot/kernel_entry.o ${OBJ_FILES}
-	x86_64-elf-ld -m elf_i386 -o $@ -Ttext 0x1000 $^ --oformat binary
+	ld -m elf_i386 -o $@ -Ttext 0x1000 $^ --oformat binary
 
 os-image.img: boot/mbr.bin kernel.img
 	cat $^ > $@
@@ -21,7 +25,7 @@ else
 endif
 
 %.o: %.c ${HEADERS}
-	x86_64-elf-gcc -I ./kernel/include -g -m32 -ffreestanding -c $< -o $@
+	gcc -I ./kernel/include -g -m32 -ffreestanding -nostdlib -fno-builtin -fno-stack-protector -no-pie -fno-pic -Wall -c $< -o $@
 
 %.o: %.asm
 	nasm $< -f elf -o $@
