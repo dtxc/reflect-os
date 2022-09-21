@@ -3,103 +3,91 @@
     All rights reserverd
 */
 
-#include <mem.h>
-#include <idt.h>
-#include <isr.h>
-#include <ports.h>
-#include <types.h>
-#include <timer.h>
-#include <string.h>
-#include <hal/hal.h>
-
+#include "mem.h"
+#include "idt.h"
+#include "isr.h"
+#include "rand.h"
+#include "stdio.h"
+#include "stdlib.h"
+#include "ports.h"
+#include "types.h"
+#include "string.h"
+#include "timer.h"
 #include "kernel.h"
+
+#include "hal/hal.h"
+#include "../drivers/drive.h"
 #include "../drivers/display.h"
 #include "../drivers/keyboard.h"
 
-static char command[256];
-
-void start_kernel() {
-    isr_install();
-    asm volatile("sti");
-    init_keyboard();
-    init_dynamic_mem();
-    clear_screen();
-    print_string("Welcome to theroid os!\ntype help for a command list\n");
-    print_string(">> ");
+static char *tick() {
+    char *ptr = malloc(5);
+    sprintf(ptr, "%u", gettick());
+    return ptr;
 }
 
-void save_command(char cmd[]) {
-    command[0] = '\0';
-    for (int i = 0; i < string_length(cmd); i++) {
-        append(command, cmd[i]);
-    }
+void start_kernel() {
+    clear_screen();
+    printf("Initializing interrupt service routines\n");
+    isr_install();
+
+    printf("Enabling external interrupts\n");
+    asm volatile("sti");
+
+    printf("Initializing timer (IRQ 0)\n");
+    init_timer(50);
+
+    printf("[%u] Initializing keyboard (IRQ 1)\n", gettick());
+    init_keyboard();
+
+    printf("[%u] Initializing dynamic memory\n", gettick());
+    init_dynamic_mem();
+
+    printf("[%u] Initializing hard drive (IRQ 2, 3)\n", gettick());
+    init_drive();
+
+    printf("Boot completed in %u ticks\nWelcome to theroid os!\ntype help for a command list\n>> ", gettick());
 }
 
 void execute_command(char *input) {
     print_nl();
     input = trim(input);
-    save_command(input);
-    if (compare_string(input, "halt") || compare_string(input, "shutdown")) {
+    if (strcmp(input, "halt") || strcmp(input, "shutdown")) {
         shutdown();
-    } else if (compare_string(input, "clear")) {
+    } else if (strcmp(input, "clear")) {
         clear_screen();
-        print_string(">> ");
-    } else if (compare_string(input, "help")) {
-        print_string(
+        printf(">> ");
+    } else if (strcmp(input, "help")) {
+        printf(
             "halt - stops the system\n"
             "clear - clears the screen\n"
             "echo <text> - prints text\n"
             "panic - triggers a kenrel panic\n"
             "reboot - reboots the system by causing a triple cpu fault\n"
+            ">> "
         );
-        print_string(">> ");
     } else if (startswith(input, "echo")) {
-        char **arr = 0;
+        char **arr;
         int tokens = split(input, ' ', &arr);
         for (int i = 1; i < tokens; i++) {
-            print_string(trim(arr[i]));
-            print_string(" ");
+            printf("%s ", arr[i]);
         }
         print_nl();
-        print_string(">> ");
+        printf(">> ");
     } else if (startswith(input, "panic")) {
-        panic(MANUALLY_INITIATED_PANIC, "e");
-    } else if (compare_string(input, "reboot")) {
+        panic("e");
+    } else if (strcmp(input, "reboot")) {
         reboot();
-    } else {
-        print_string("Unknown command: ");
-        print_string(input);
-        print_nl();
-        print_string(">> ");
+    } else if (strcmp(input, "rand")) {
+        printf("%u", rand() % (rand() % rand()));
+    }
+    else {
+        printf("Unknown command: %s\n>> ", input);
     }
 }
 
-char *get_previous_command() {
-    return command;
-}
-
-void panic(panicreason_t reason, char *message) {
+void panic(char *message) {
     clear_screen();
-    print_string("----beginning of kernel panic----\n\n");
-    print_string(message);
-    print_string("\n\n-------end of kernel panic-------\n");
-    switch (reason) {
-        case INTERRUPT_EXCEPTION: {
-            print_string("Kernel panic: unhandled interrupt exception");
-            break;
-        }
-        case ROOT_MOUNT_FAILED: {
-            print_string("Kernel panic: failed to mount root device");
-            break;
-        }
-        case MANUALLY_INITIATED_PANIC: {
-            print_string("Kernel panic: manually initiated panic");
-            break;
-        }
-        default: {
-            print_string("Kernel panic: unknown exception");
-        }
-    }
-    asm volatile("cli");
-    asm volatile("hlt");
+    printf("----beginning of kernel panic----\n\n%s\n\n-------end of kernel panic-------\n", message);
+    asm volatile("cli\nhlt");
 }
