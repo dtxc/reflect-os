@@ -40,11 +40,3 @@ clean:
 	$(RM) $(shell find . -name "*.o")
 	$(RM) kernel.img
 	$(RM) boot/*.bin
-
-compress:
-ifeq ($(shell test -e os-image.img && echo -n yes),yes)
-	zip -9 "os-image.zip" os-image.img
-else
-	$(MAKE) build
-	zip -9 "os-image.zip" os-image.img
-endif
