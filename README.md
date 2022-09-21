@@ -2,7 +2,7 @@
 i386 os (wip)
 
 ## features
-+ keyboard, vga and hard drive drivers
++ keyboard and vga drivers
 + dynamic memory
 + std and random libraries
 
