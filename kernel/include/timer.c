@@ -3,26 +3,24 @@
     All rights reserverd
 */
 
-#include <isr.h>
-#include <ports.h>
-#include <string.h>
+#include "isr.h"
+#include "ports.h"
 
-
+#include "../kernel.h"
 #include "../drivers/display.h"
 
 u32 tick = 0;
 
 static void timer_callback(registers_t *regs) {
     tick++;
-    print_string("Tick: ");
+}
 
-    char tick_ascii[256];
-    int_to_string(tick, tick_ascii);
-    print_string(tick_ascii);
-    print_nl();
+u32 gettick() {
+    return tick;
 }
 
 void init_timer(u32 freq) {
+    if (freq == 0) panic("Invalid timer frequency");
     register_interrupt_handler(IRQ0, timer_callback);
 
     u32 divisor = 1193180 / freq;
