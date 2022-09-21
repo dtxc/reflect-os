@@ -40,7 +40,7 @@ read_disk:
     out dx, al
 
 .hd_not_ready:
-    nop ;e
+    nop
     in al, dx
     and al, 0x88
     cmp al, 0x08
