@@ -78,7 +78,6 @@ void *malloc(size_t size) {
         return (void *) ((u8 *) mem_node_allocate + DYNAMIC_MEM_NODE_SIZE);
     }
 
-    printf("Memory not allocated");
     return nullptr;
 }
 
