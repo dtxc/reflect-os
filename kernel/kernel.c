@@ -20,12 +20,6 @@
 #include "../drivers/display.h"
 #include "../drivers/keyboard.h"
 
-static char *tick() {
-    char *ptr = malloc(5);
-    sprintf(ptr, "%u", gettick());
-    return ptr;
-}
-
 void start_kernel() {
     clear_screen();
     printf("Initializing interrupt service routines\n");
