@@ -10,6 +10,7 @@ i386 os (wip)
 + kernel fails to boot when its larger than 25 kb
 
 ## todo
++ drive interrupt handler
 + replace current bootloader with grub
 + paging
 + fat16/ext2 implementation
