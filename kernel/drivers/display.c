@@ -3,18 +3,18 @@
     All rights reserverd
 */
 
-#include <mem.h>
-#include <types.h>
-#include <ports.h>
-
+#include "mem.h"
+#include "types.h"
+#include "ports.h"
 #include "display.h"
+#include "stdlib.h"
 
 void set_cursor(int offset) {
     offset /= 2;
     port_byte_out(REG_SCREEN_CTRL, 14);
-    port_byte_out(REG_SCREEN_DATA, (uchar) (offset >> 8));
+    port_byte_out(REG_SCREEN_DATA, (u8) (offset >> 8));
     port_byte_out(REG_SCREEN_CTRL, 15);
-    port_byte_out(REG_SCREEN_DATA, (uchar) (offset & 0xff));
+    port_byte_out(REG_SCREEN_DATA, (u8) (offset & 0xff));
 }
 
 int get_cursor() {
@@ -25,26 +25,26 @@ int get_cursor() {
     return offset * 2;
 }
 
-int get_offset(int col, int row) {
+static int get_offset(int col, int row) {
     return 2 * (row * MAX_COLS + col);
 }
 
-int get_row_from_offset(int offset) {
+static int get_row_from_offset(int offset) {
     return offset / (2 * MAX_COLS);
 }
 
-int move_offset_to_new_line(int offset) {
+static int move_offset_to_new_line(int offset) {
     return get_offset(0, get_row_from_offset(offset) + 1);
 }
 
-void set_char_at_video_memory(char character, int offset) {
+static void set_char_at_video_memory(char character, int offset) {
     u8 *vidmem = (u8*) VIDEO_ADDRESS;
     vidmem[offset] = character;
     vidmem[offset + 1] = WHITE_ON_BLACK;
 }
 
-int scroll_ln(int offset) {
-    memory_copy(
+static int scroll_ln(int offset) {
+    memcpy(
             (u8*)(get_offset(0, 1) + VIDEO_ADDRESS),
             (u8*)(get_offset(0, 0) + VIDEO_ADDRESS),
             MAX_COLS * (MAX_ROWS - 1) * 2
@@ -57,6 +57,19 @@ int scroll_ln(int offset) {
     return offset - 2 * MAX_COLS;
 }
 
+void print_char(char c) {
+    int offset = get_cursor();
+    if (offset >= MAX_ROWS * MAX_COLS * 2) {
+        offset = scroll_ln(offset);
+    }
+    if (c == '\n') {
+        print_nl();
+    } else {
+        set_char_at_video_memory(c, offset);
+        offset += 2;
+        set_cursor(offset);
+    }
+}
 
 void print_string(char *string) {
     int offset = get_cursor();

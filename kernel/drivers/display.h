@@ -14,8 +14,8 @@
 
 void set_cursor(int offset);
 int get_cursor();
+void print_char(char c);
 void print_string(char *string);
 void print_nl();
 void clear_screen();
-int scroll_ln(int offset);
 void print_backspace();

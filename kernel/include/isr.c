@@ -3,11 +3,11 @@
     All rights reserverd
 */
 
-#include <isr.h>
-#include <idt.h>
-#include <ports.h>
-#include <string.h>
-
+#include "isr.h"
+#include "idt.h"
+#include "ports.h"
+#include "stdio.h"
+#include "stdlib.h"
 #include "../kernel.h"
 
 isr_t interrupt_handlers[256];
@@ -117,15 +117,8 @@ char *exception_messages[] = {
 
 void isr_handler(registers_t *r) {
     char *msg;
-    char *msg1 = "recieved interrupt: ";
-    for (int i = 0; i < string_length(msg1); i++) append(msg, msg1[i]);
-    char interrupt[3];
-    int_to_string(r->int_no, interrupt);
-    for (int i = 0; i < 3; i++) append(msg, interrupt[i]);
-    append(msg, '\n');
-    char *msg2 = exception_messages[r->int_no];
-    for (int i = 0; i < string_length(msg2); i++) append(msg, msg2[i]);
-    panic(INTERRUPT_EXCEPTION, msg);
+    printf("%u", r->int_no);
+    panic(msg);
 }
 
 void register_interrupt_handler(u8 n, isr_t handler) {

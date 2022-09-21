@@ -3,10 +3,10 @@
     All rights reserverd
 */
 
-#include <ports.h>
+#include "ports.h"
 
-uchar port_byte_in(u16 port) {
-    uchar result;
+u8 port_byte_in(u16 port) {
+    u8 result;
     asm("in %%dx, %%al" : "=a" (result) : "d" (port));
     return result;
 }

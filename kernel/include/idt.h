@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <types.h>
+#include "types.h"
 
 #define KERNEL_CS 0x08
 #define IDT_ENTRIES 256
