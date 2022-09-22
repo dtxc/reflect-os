@@ -40,7 +40,7 @@ void start_kernel() {
     printf("[%u] Initializing hard drive (IRQ 2, 3)\n", gettick());
     init_drive();
 
-    printf("Welcome to theroid os!\ntype help for a command list\n>> ", gettick());
+    printf("Welcome to theroid os!\ntype help for a command list\n>> ");
 }
 
 void execute_command(char *input) {
