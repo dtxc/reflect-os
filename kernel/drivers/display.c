@@ -9,6 +9,8 @@
 #include "display.h"
 #include "stdlib.h"
 
+#define TAB_LENGTH 4
+
 void set_cursor(int offset) {
     offset /= 2;
     port_byte_out(REG_SCREEN_CTRL, 14);
@@ -64,6 +66,10 @@ void print_char(char c) {
     }
     if (c == '\n') {
         print_nl();
+    } else if (c == '\t') {
+        for (char i = 0; i < TAB_LENGTH; i++) {
+            print_char(' ');
+        }
     } else {
         set_char_at_video_memory(c, offset);
         offset += 2;
@@ -75,15 +81,7 @@ void print_string(char *string) {
     int offset = get_cursor();
     int i = 0;
     while (string[i] != 0) {
-        if (offset >= MAX_ROWS * MAX_COLS * 2) {
-            offset = scroll_ln(offset);
-        }
-        if (string[i] == '\n') {
-            offset = move_offset_to_new_line(offset);
-        } else {
-            set_char_at_video_memory(string[i], offset);
-            offset += 2;
-        }
+        print_char(string[i]);
         i++;
     }
     set_cursor(offset);

@@ -10,14 +10,6 @@
 #define false 0
 #define nullptr ((void *) 0)
 
-typedef struct {
-    float Re, Im;
-} complex32_t;
-
-typedef struct {
-    double Re, Im;
-} complex64_t;
-
 typedef void *type_t;
 typedef char bool;
 typedef unsigned short size_t;
