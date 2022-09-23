@@ -9,4 +9,4 @@
 
 u32 rand();
 void srand(u32 seed);
-//char *rand_string(u16 len, char *arr);
+char *rand_string(u16 len, char *arr);
