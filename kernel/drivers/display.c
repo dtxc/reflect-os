@@ -78,13 +78,9 @@ void print_char(char c) {
 }
 
 void print_string(char *string) {
-    int offset = get_cursor();
-    int i = 0;
-    while (string[i] != 0) {
+    for (int i = 0; string[i] != '\0'; i++) {
         print_char(string[i]);
-        i++;
     }
-    set_cursor(offset);
 }
 
 void print_nl() {
