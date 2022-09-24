@@ -69,7 +69,7 @@ void start_kernel() {
 }
 
 void execute_command(char *input) {
-    print_nl();
+    printf("\n");
     input = trim(input);
     if (strcmp(input, "halt") || strcmp(input, "shutdown")) {
         shutdown();
@@ -98,7 +98,7 @@ void execute_command(char *input) {
     } else if (strcmp(input, "reboot")) {
         reboot();
     } else if(strcmp(input, "rand")) {
-        srand(gettick());
+        //srand(gettick());
         printf(rand_string(rand() % 32, STRING_LETTERS));
     }
     else {
