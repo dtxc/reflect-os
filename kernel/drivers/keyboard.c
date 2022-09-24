@@ -73,6 +73,16 @@ const char sc_ascii[] = {'?', '?', '1', '2', '3', '4', '5', '6',
                          'h', 'j', 'k', 'l', ';', '\'', '`', '?', '\\', 'z', 'x', 'c', 'v',
                          'b', 'n', 'm', ',', '.', '/', '?', '?', '?', ' '};
 
+static bool backspace(char s[]) {
+    int len = strlen(s);
+    if (len > 0) {
+        s[len - 1] = '\0';
+        return true;
+    } else {
+        return false;
+    }
+}
+
 static void keyboard_callback(registers_t *regs) {
     u8 status;
     u16 scancode;
@@ -96,15 +106,14 @@ static void keyboard_callback(registers_t *regs) {
         if (scancode == SHIFT || scancode == RSHIFT) shift = true;
         if (scancode == SHIFT_RELEASE || scancode == RSHIFT_RELEASE) shift = false;
         if (scancode == BACKSPACE) {
-            if (backspace(key_buffer)) print_backspace();
-            key_buffer[0] = '\0';
+            if (backspace(key_buffer)) print_char('\b');
         }
         if (scancode == LEFT_ARROW) {
             if (backspace(key_buffer)) set_cursor(get_cursor()-1);
         }
         if (scancode == UP_ARROW) {
             if (!(i >= (sizeof(history) / sizeof(history[0])))) {
-                while (backspace(key_buffer)) print_backspace();
+                while (backspace(key_buffer)) print_char('\b');
                 printf(history[i]);
                 strcpy(key_buffer, history[i]);
                 i++;
@@ -112,18 +121,18 @@ static void keyboard_callback(registers_t *regs) {
         }
         if (scancode == DOWN_ARROW) {
             if (i > 0) {
-                while (backspace(key_buffer)) print_backspace();
+                while (backspace(key_buffer)) print_char('\b');
                 i--;
                 printf(history[i]);
                 strcpy(key_buffer, history[i]);
             } else if (i == 0) {
-                while (backspace(key_buffer)) print_backspace();
+                while (backspace(key_buffer)) print_char('\b');
             }
         }
         if (scancode == CAPS_LOCK) shift = !shift;
         if (scancode == ENTER) {
             if (strlen(key_buffer) == 0) {
-                print_nl();
+                print_char('\n');
                 print_string(">> ");
             } else {
                 if (strcmp(key_buffer, "reboot")) {
