@@ -8,5 +8,4 @@ i386 os (wip)
 
 ## todo
 + drive interrupt handler
-+ paging
 + fat16/ext2 implementation
