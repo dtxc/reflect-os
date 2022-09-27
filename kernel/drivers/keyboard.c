@@ -103,11 +103,11 @@ static void execute_command(char *input) {
             ">> "
         );
     } else if (startswith(input, "echo")) {
-        char **arr = split(input, ' ');
-        int i = 1;
-        while (!strcmp(arr[i], "\0")) {
+        char **arr;
+        int tokens = split(input, ' ', &arr);
+        for (int i = 1; i < tokens; i++) {
             printf(arr[i]);
-            i++;
+            print_char(' ');
         }
         printf("\n>> ");
     } else if (startswith(input, "panic")) {
