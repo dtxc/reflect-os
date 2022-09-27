@@ -22,7 +22,7 @@ section .text
 global _start:function (_start.end - _start)
 _start:
 	cli
-    mov esp, stack_top
+	mov esp, stack_top
 	call start_kernel
 .hang:	hlt
 	jmp .hang
