@@ -19,6 +19,6 @@ bool startswith(char str[], char what[]);
 char *strtok(char *s, char *delm);
 char *strdup(char *token);
 char *strcat(char *dest, char *src);
-char **split(char *str, char delm);
+int split(char *str, char delimiter, char ***dest);
 char *trim(char *str);
 bool isdigit(char c);
