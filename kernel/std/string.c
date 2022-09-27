@@ -84,41 +84,50 @@ char *strcat(char *dest, char *src) {
     return dest;
 }
 
-char **split(char *str, char delm) {
-    char **res;
-    size_t count = 0;
-    char *tmp = "\0";
-    char *last = "\0";
-    char delim[2];
-    delim[0] = delm;
-    delim[1] = 0;
+int split(char *str, char delimiter, char ***dest) {
+    int count = 1;
+    int token_len = 1;
+    int i = 0;
+    char *p;
+    char *t;
 
-    while (*tmp) {
-        if (delm == *tmp) {
-            count++;
-            last = tmp;
-        }
-        tmp++;
+    p = str;
+    while (*p != '\0') {
+        if (*p == delimiter) count++;
+        p++;
     }
 
-    count += last < (str + strlen(str) - 1);
-    count++;
-
-    res = malloc(sizeof(char*) * count);
-    if (res) {
-        size_t idx = 0;
-        char *token = strtok(str, delim);
-
-        while (token) {
-            ASSERT(idx < count);
-            *(res + idx++) = strdup(token);
-            token = strtok(0, delim);
+    *dest = (char **) malloc(count);
+    if (*dest == 0) return 1;
+    p = str;
+    while (*p != '\0') {
+        if (*p == delimiter) {
+            (*dest)[i] = (char *) malloc(token_len);
+            if ((*dest)[i] == 0) return 1;
+            token_len = 0;
+            i++;
         }
-        ASSERT(idx == count - 1);
-        *(res + idx) = 0;
+        p++;
+        token_len++;
+    }
+    (*dest)[i] = (char *) malloc(token_len);
+    if ((*dest)[i] == 0) return 1;
+    i = 0;
+    p = str;
+    t = ((*dest)[i]);
+    while (*p != '\0') {
+        if (*p != delimiter && *p != '\0') {
+            *t = *p;
+            t++;
+        } else {
+            *t = '\0';
+            i++;
+            t = ((*dest)[i]);
+        }
+        p++;
     }
 
-    return res;
+    return count;
 }
 
 char *trim(char *str) {
