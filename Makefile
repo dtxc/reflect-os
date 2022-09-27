@@ -13,7 +13,6 @@ os-image.iso: kernel.bin
 	cd build && cp ../$^ ./boot/$^ && cp ../boot/grub.cfg ./boot/grub/grub.cfg && cd .. && \
 		grub-mkrescue -o $@ build
 
-#gcc -m32 -T linker.ld -o $@ -ffreestanding -nostdlib -nostdinc -fno-builtin -fno-stack-protector -no-pie -fno-pic -O1 $^ -lgcc
 kernel.bin: boot/gdt.o ${OBJ_FILES}
 	ld -m elf_i386 -o $@ -Tlinker.ld $^
 
