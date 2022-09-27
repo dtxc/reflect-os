@@ -14,7 +14,7 @@ os-image.iso: kernel.bin
 		grub-mkrescue -o $@ build
 
 #gcc -m32 -T linker.ld -o $@ -ffreestanding -nostdlib -nostdinc -fno-builtin -fno-stack-protector -no-pie -fno-pic -O1 $^ -lgcc
-kernel.bin: asm/gdt.o ${OBJ_FILES}
+kernel.bin: boot/gdt.o ${OBJ_FILES}
 	ld -m elf_i386 -o $@ -Tlinker.ld $^
 
 prepare:
@@ -32,8 +32,8 @@ debug: os-image.iso
 debug-kernel: kernel.bin
 	qemu-system-i386 -kernel $^ -d int --no-reboot
 
-asm/gdt.o:
-	gcc -c -w -m32 -masm=intel asm/gdt.s -o $@
+boot/gdt.o:
+	gcc -c -w -m32 -masm=intel boot/gdt.s -o $@
 
 %.o: %.c
 	gcc $(CCFLAGS) -c $< -o $@
