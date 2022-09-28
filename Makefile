@@ -5,7 +5,7 @@ OBJ_FILES = ${C_SOURCES:.c=.o \
 	asm/disk_io.o \
 	asm/util.o}
 
-CCFLAGS = -I ./kernel/include -g -m32 -std=gnu99 -ffreestanding -nostdlib -nostdinc -fno-builtin -fno-stack-protector -no-pie -fno-pic -Wall -Wextra -O2 -lgcc
+CCFLAGS = -I ./kernel/include -g -m32 -std=gnu99 -ffreestanding -nostdlib -fno-builtin -fno-stack-protector -no-pie -fno-pic -Wall -Wextra -O2 -lgcc
 
 build: prepare os-image.iso
 
