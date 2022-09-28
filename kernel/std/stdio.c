@@ -2,15 +2,10 @@
     Copyright (c) 2022 thatOneArchUser
     All rights reserved
 */
-
 #include "types.h"
-#include "stdio.h"
-#include "stdlib.h"
 #include "hw/display.h"
 
-extern void *get_ebp();
-
-static void _printdec(i32 n) {
+static void _printdec(int n) {
     if (n == 0) print_string("0");
     if (n < 0) {
         print_string("-");
@@ -36,7 +31,7 @@ static void _printdec(i32 n) {
 }
 
 static void _printhex(u32 n) {
-    i32 tmp;
+    int tmp;
     print_string("0x");
 
     bool bl;
@@ -62,45 +57,44 @@ static void _printhex(u32 n) {
     }
 }
 
-void printf(char* str, ...) {
-    void *ebp = get_ebp();
-    void *ptr = ebp + 12;
+static void _vprintf(char *fmt, va_list list) {
     int i = 0;
-    char *dest = "\0";  
 
     while (1) {
-        char c = str[i];
+        char c = fmt[i];
         if (c == '\0') break;
 
         if (c == '%') {
             i++;
-            char next = str[i];
+            char next = fmt[i];
             if (c == '\0') break;
 
             if (next == 'd') {
-                i32 int_arg = *((i32*) ptr);
+                int int_arg = va_arg(list, int);
                 _printdec(int_arg);
-                ptr += 4;
             } else if (next == 'u') {
-                u32 int_arg = *((u32*) ptr);
+                u32 int_arg = va_arg(list, u32);
                 _printdec(int_arg);
-                ptr += 4;
             } else if (next == 'x') {
-                u32 int_arg = *((u32*) ptr);
+                u32 int_arg = va_arg(list, u32);
                 _printhex(int_arg);
-                ptr += 4;
             } else if (next == 'c') {
-                char char_arg = *((char*) ptr);
+                char char_arg = va_arg(list, char);
                 print_char(char_arg);
-                ptr += 4;
             } else if (next == 's') {
-                char *str_arg = *((char**) ptr);
+                char *str_arg = va_arg(list, char*);
                 print_string(str_arg);
-                ptr += 4;
             }
         } else {
             print_char(c);
         }
         i++;
     }
+}
+
+void printf(char *str, ...) {
+    va_list arg;
+    va_start(arg, str);
+    _vprintf(str, arg);
+    va_end(arg);
 }
