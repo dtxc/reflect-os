@@ -100,39 +100,6 @@ extern void irq12();
 extern void irq13();
 extern void irq14();
 extern void irq15();
-// extern void irq32();
-// extern void irq33();
-// extern void irq34();
-// extern void irq35();
-// extern void irq36();
-// extern void irq37();
-// extern void irq38();
-// extern void irq39();
-// extern void irq40();
-// extern void irq41();
-// extern void irq42();
-// extern void irq43();
-// extern void irq44();
-// extern void irq45();
-// extern void irq46();
-// extern void irq47();
-
-// #define irq0 irq32
-// #define irq1 irq33
-// #define irq2 irq34
-// #define irq3 irq35
-// #define irq4 irq36
-// #define irq5 irq37
-// #define irq6 irq38
-// #define irq7 irq39
-// #define irq8 irq40
-// #define irq9 irq41
-// #define irq10 irq42
-// #define irq11 irq43
-// #define irq12 irq44
-// #define irq13 irq45
-// #define irq14 irq46
-// #define irq15 irq47
 
 void register_interrupt_handler(u8 n, isr_t handler);
 void set_idt_gate(int n, u32 handler);
