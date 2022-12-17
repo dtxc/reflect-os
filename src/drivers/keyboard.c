@@ -1,4 +1,3 @@
-#include "hw/keyboard.h"
 #include <io.h>
 #include <isr.h>
 #include <vga.h>
