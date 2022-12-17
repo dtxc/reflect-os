@@ -4,12 +4,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-const char *sc_name[] = {"ERROR", "Esc", "1", "2", "3", "4", "5", "6",
-                         "7", "8", "9", "0", "-", "=", "Backspace", "Tab", "Q", "W", "E",
-                         "R", "T", "Y", "U", "I", "O", "P", "[", "]", "Enter", "Lctrl",
-                         "A", "S", "D", "F", "G", "H", "J", "K", "L", ";", "'", "`",
-                         "LShift", "\\", "Z", "X", "C", "V", "B", "N", "M", ",", ".",
-                         "/", "RShift", "Keypad *", "LAlt", "Spacebar"};
 const char sc_ascii_shift[] = {'?', '?', '!', '@', '#', '$', '%', '^',
                          '&', '*', '(', ')', '_', '+', '?', '?', 'Q', 'W', 'E', 'R', 'T', 'Y',
                          'U', 'I', 'O', 'P', '{', '}', '?', '?', 'A', 'S', 'D', 'F', 'G',
@@ -25,6 +19,13 @@ static char key_buffer[256];
 
 #define ENTER 0x1C
 #define BACKSPACE 0x0E
+
+#define SHIFT 0x2A
+#define RSHIFT 0x36
+#define SHIFT_RELEASE 0xAA
+#define RSHIFT_RELEASE 0xB6
+
+static bool shift = false;
 
 static bool backspace(char s[]) {
     int len = strlen(s);
@@ -57,11 +58,17 @@ static void keyboard_callback() {
                 while (backspace(key_buffer));
             }
         }
+        if (scancode == SHIFT || scancode == RSHIFT) {
+            shift = true;
+        }
+        if (scancode == SHIFT_RELEASE || scancode == RSHIFT_RELEASE) {
+            shift = false;
+        }
         if (scancode <= 57 && sc_ascii[scancode] != '?') {
             if (strlen(key_buffer) == 256) {
                 return;
             }
-            char letter = sc_ascii[scancode];
+            char letter = (shift) ? sc_ascii_shift[scancode] : sc_ascii[scancode];
             append(key_buffer, letter);
             char str[2] = {letter, '\0'};
             print(str);
