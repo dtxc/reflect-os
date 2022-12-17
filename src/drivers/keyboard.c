@@ -43,12 +43,14 @@ static void keyboard_callback() {
     status = inb(KEYBOARD_STATUS);
     if (status & 0x01) {
         scancode = inb(KEYBOARD_DAT);
+
         if (scancode == BACKSPACE) {
             if (get_x() > 3) {
                 printc('\b');
                 backspace(key_buffer);
             }
         }
+
         if (scancode == ENTER) {
             if (strlen(key_buffer) == 0) {
                 printc('\n');
@@ -58,12 +60,14 @@ static void keyboard_callback() {
                 while (backspace(key_buffer));
             }
         }
+
         if (scancode == SHIFT || scancode == RSHIFT) {
             shift = true;
         }
         if (scancode == SHIFT_RELEASE || scancode == RSHIFT_RELEASE) {
             shift = false;
         }
+
         if (scancode <= 57 && sc_ascii[scancode] != '?') {
             if (strlen(key_buffer) == 256) {
                 return;
@@ -75,7 +79,7 @@ static void keyboard_callback() {
             inb(KEYBOARD_STATUS);
         }
     }
-    outb(0x20, 0x20);
+    outb(PIC_MASTER_CMD, PIC_EIO);
 }
 
 void init_keyboard() {
