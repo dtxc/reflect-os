@@ -100,7 +100,7 @@ void start_kernel() {
     init_dynamic_mem();
     init_keyboard();
 
-    print("Copyright (c) thatOneArchUser 2022-2023\n\nWelcome to theroid os!\nType 'help' for a command list\n>> ");
+    print("Copyright (c) thatOneArchUser 2022-2023\n\nType 'help' for a command list\n>> ");
     while (1);
 }
 
