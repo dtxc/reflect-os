@@ -1,4 +1,4 @@
-# theroid-os
+# osdev
 i386 os (wip)
 
 ## features
