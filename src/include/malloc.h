@@ -14,4 +14,6 @@ typedef struct mem_node {
 
 void init_dynamic_mem();
 void *malloc(u32 size);
-void free(void *p);
+void mfree(void *p);
+void *calloc(u32 nmemb, u32 size);
+void bzero(void *s, u32 n);

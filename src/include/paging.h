@@ -23,7 +23,11 @@ typedef struct {
     u32 addr;
 } pagedir_t;
 
+extern pagedir_t *kernel_dir;
+
 void init_paging();
 void switch_page_dir(pagedir_t *dir);
 page_t *get_page(u32 addr, int make, pagedir_t *dir);
 void pgf(regs_t regs);
+void alloc_frame(page_t *page, int kernel, int writable);
+void free_frame(page_t *page);

@@ -10,6 +10,8 @@
 #define INDEX_FROM_BIT(a) (a / 32)
 #define OFF_FROM_BIT(a) (a % 32)
 
+extern heap_t *kheap;
+
 pagedir_t *kernel_dir = 0;
 pagedir_t *crt_dir = 0;
 
@@ -90,13 +92,24 @@ void init_paging() {
     crt_dir = kernel_dir;
 
     int i = 0;
-    while (i < placement_addr) {
+    for (i = KHEAP_START; i < KHEAP_START + KHEAP_INITIAL_SZ; i += 0x1000) {
+        get_page(i, 1, kernel_dir);
+    }
+
+    i = 0;
+    while (i < placement_addr + 0x1000) {
         alloc_frame(get_page(i, 1, kernel_dir), 0, 0);
         i += 0x1000;
     }
 
+    for (i = KHEAP_START; i < KHEAP_START + KHEAP_INITIAL_SZ; i += 0x1000) {
+        alloc_frame(get_page(i, 1, kernel_dir), 0, 0);
+    }
+
     register_interrupt_handler(14, pgf);
     switch_page_dir(kernel_dir);
+
+    kheap = mkheap(KHEAP_START, KHEAP_START + KHEAP_INITIAL_SZ, 0xCFFFF000, 0, 0);
 }
 
 void switch_page_dir(pagedir_t *dir) {

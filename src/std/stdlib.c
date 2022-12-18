@@ -55,7 +55,7 @@ void vsprintf(char *dest, char *fmt, va_list list) {
                 case 'f': {
                     double double_arg = va_arg(list, double);
                     char buff[10];
-                    ftoa(double_arg, buff);
+                    ftoa(buff, double_arg);
                     idx += strcpy(dest + idx, buff);
                     break;
                 }

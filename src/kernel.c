@@ -2,10 +2,12 @@
 #include <vga.h>
 #include <gdt.h>
 #include <idt.h>
+#include <psf.h>
+#include <timer.h>
 #include <math.h>
-#include <malloc.h>
 #include <kheap.h>
 #include <stdio.h>
+#include <malloc.h>
 #include <string.h>
 #include <stdlib.h>
 #include <paging.h>
@@ -91,16 +93,19 @@ int system(char *cmd) {
     return ERR_CMD_NOTFOUND;
 }
 
-void start_kernel() {
+void start_kernel(struct multiboot *mboot_ptr) {
     clear();
 
     init_gdt();
     init_idt();
+    psf_init();
     init_paging();
     init_dynamic_mem();
     init_keyboard();
 
+    void *p = alloc(10);
+    kfree(p);
+
     print("Copyright (c) thatOneArchUser 2022-2023\n\nType 'help' for a command list\n>> ");
     while (1);
 }
-

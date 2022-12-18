@@ -1,12 +1,10 @@
 #pragma once
 
+#include <math.h>
 #include <common.h>
 
-#define low_16(addr) (u16)((addr & 0xFFFF))
-#define high_16(addr) (u16)(((addr) >> 16) & 0xFFFF)
-
 void append(char *s, char n);
-char *ftoa(double f, char *buff);
+void ftoa(char *buff, double f);
 void *memset(void *dest, u8 c, int n);
 void memcpy(void *dest, void *src, int num);
 int strcpy(char *dest, char *src);

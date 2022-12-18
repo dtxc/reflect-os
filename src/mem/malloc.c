@@ -77,7 +77,7 @@ void *malloc(u32 size) {
     return nullptr;
 }
 
-void free(void *p) {
+void mfree(void *p) {
     if (p == nullptr) {
         return;
     }
@@ -90,4 +90,21 @@ void free(void *p) {
     crt_node->used = false;
     crt_node = merge_next_to_crt(crt_node);
     merge_crt_to_prev(crt_node);
+}
+
+void bzero(void *s, u32 n) {
+    char *c = s;
+    for (int i = 0; i < n; i++) {
+        c[i] = '\0';
+    }
+}
+
+void *calloc(u32 nmemb, u32 size) {
+    if (nmemb == 0 || size == 0) {
+        return nullptr;
+    }
+
+    char *p = malloc(nmemb * size);
+    bzero(p, nmemb * size);
+    return p;
 }

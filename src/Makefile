@@ -2,7 +2,8 @@ C_SOURCES = $(shell find . -name "*.c")
 OBJ_FILES = ${C_SOURCES:.c=.o \
 	boot/boot.o \
 	boot/dt.o \
-	interrupt/interrupt.o}
+	interrupt/interrupt.o \
+	fonts/terminus.o}
 
 CCFLAGS = -I ./include -g -m32 -ffreestanding -nostdlib -fno-builtin -fno-stack-protector -no-pie -fno-pic -Wall -Wextra -O2
 KERNELBIN = ../build/kernel.bin
@@ -15,7 +16,7 @@ os-image.iso: kernel.bin
 		grub-mkrescue -o $@ build
 
 kernel.bin: ${OBJ_FILES}
-	ld -m elf_i386 -o ../build/$(notdir $@) -Tlinker.ld $(shell find ../build/obj/ -name "*.o")
+	ld -m elf_i386 -o ../build/$(notdir $@) -Tlinker.ld ../build/obj/boot.o $(shell find ../build/obj/ -name "*.o" ! -name "boot.o")
 
 prepare:
 	mkdir -p ../build/boot/grub ../build/obj
@@ -58,5 +59,8 @@ endif
 %.o: %.asm
 	nasm $< -f elf -o ../build/obj/$(notdir $@)
 	
+%.o: %.psf
+	objcopy -O elf32-i386 -B i386 -I binary $< ../build/obj/$(notdir $@)
+
 clean:
 	$(RM) -rf ../build $(OSBIN) $(KERNELBIN)

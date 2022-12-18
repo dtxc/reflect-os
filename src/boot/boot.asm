@@ -1,29 +1,33 @@
-[extern start_kernel]
-MBALIGN  equ  1 << 0
-MEMINFO  equ  1 << 1
-FLAGS    equ  MBALIGN | MEMINFO
-MAGIC    equ  0x1BADB002  
-CHECKSUM equ -(MAGIC + FLAGS)  
- 
-section .multiboot
-align 4
+MBOOT_PAGE_ALIGN equ 1 << 0
+MBOOT_MEM_INFO   equ 1 << 1
+
+MAGIC      equ 0x1BADB002
+FLAGS      equ MBOOT_PAGE_ALIGN | MBOOT_MEM_INFO
+CHECKSUM   equ -(MAGIC + FLAGS)
+
+bits 32
+
+global mboot
+extern code
+extern bss
+extern end
+
+mboot:
 	dd MAGIC
 	dd FLAGS
 	dd CHECKSUM
- 
-section .bss
-align 16
-stack_bottom:
-resb 16384
-stack_top:
+	dd mboot
+	dd code
+	dd bss
+	dd end
+	dd start
 
-section .text
+global start
+extern start_kernel
 
-global _start:function (_start.end - _start)
-_start:
+start:
+	push ebx
+
 	cli
-	mov esp, stack_top
 	call start_kernel
-.hang:	hlt
-	jmp .hang
-.end:
+	jmp $

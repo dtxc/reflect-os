@@ -91,16 +91,31 @@ void vprintf(char *fmt, va_list list) {
                 print("0x");
                 _printhex(uint_arg);
             } else if (next == 'c') {
-                char char_arg = va_arg(list, int);
-                printc(char_arg);
+                char n = fmt[i + 1];
+                if (n == 'p') {
+                    i++;
+                    complex_t cplx = va_arg(list, complex_t);
+                    if (cplx.Re == 0) {
+                        printf("%fi", cplx.Im);
+                    } else if (cplx.Im == 0) {
+                        printf("%f", cplx.Re);
+                    } else {
+                        printf("%f+%fi", cplx.Re, cplx.Im);
+                    }
+                } else {
+                    char char_arg = va_arg(list, int);
+                    printc(char_arg);
+                }
             } else if (next == 's') {
                 char *str_arg = va_arg(list, char*);
                 print(str_arg);
             } else if (next == 'f') {
                 double double_arg = va_arg(list, double);
                 char buff[10];
-                ftoa(double_arg, buff);
+                ftoa(buff, double_arg);
                 print(buff);
+            } else if (next == '%') {
+                printc('%');
             }
         } else {
             printc(c);

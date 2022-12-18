@@ -1,3 +1,4 @@
+#include <math.h>
 #include <malloc.h>
 #include <stdio.h>
 #include <string.h>
@@ -19,41 +20,12 @@ bool startswith(char str[], char c[]) {
     return true;
 }
 
-char *ftoa(double f, char *buff) {
-    char *ptr = buff;
-    char ch;
-    long intp;
-    int precision = 10;
-
-    if (f < 0) {
-        f = -f;
-        *ptr++ = '-';
+bool endswith(char *str, char c) {
+    if (str[strlen(str) - 1] == c) {
+        return true;
     }
 
-    f += 0.00000000005;
-    intp = f;
-    f -= intp;
-
-    char *c;
-    itoa(c, intp);
-    for (int i = 0; i < strlen(c); i++) {
-        *ptr++ = c[i];
-    }
-
-    *ptr++ = '.';
-    while (precision--) {
-        f *= 10.0;
-        ch = f;
-        *ptr++ = '0' + ch;
-        f -= ch;
-    }
-
-    for (int i = strlen(ptr) - 1; ptr[i] == '0'; i--) {
-        ptr[i] = '\0';
-    }
-
-    *ptr = 0;
-    return buff;
+    return false;
 }
 
 char *strtok(char *s, char *delm) {
@@ -165,6 +137,16 @@ bool isdigit(char c) {
     return false;
 }
 
+bool isnumber(char *c) {
+    for (int i = 0; i < strlen(c); i++) {
+        if (!isdigit(c[i])) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 char *trim(char *str) {
     char *end;
     while (*str == ' ') str++;
@@ -259,6 +241,42 @@ bool strcmp(char *a, char *b) {
     }
 
     return true;
+}
+
+void ftoa(char *buff, double f) {
+    char *ptr = buff;
+    char ch;
+    long intp;
+    int precision = 10;
+
+    if (f < 0) {
+        f = -f;
+        *ptr++ = '-';
+    }
+
+    f += 0.00000000005;
+    intp = f;
+    f -= intp;
+
+    char *c;
+    itoa(c, intp);
+    for (int i = 0; i < strlen(c); i++) {
+        *ptr++ = c[i];
+    }
+
+    *ptr++ = '.';
+    while (precision--) {
+        f *= 10.0;
+        ch = f;
+        *ptr++ = '0' + ch;
+        f -= ch;
+    }
+
+    for (int i = strlen(ptr) - 1; ptr[i] == '0'; i--) {
+        ptr[i] = '\0';
+    }
+
+    *ptr = 0;
 }
 
 int itoa(char *dest, int num) {

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <common.h>
 
 #define IRQ0  32
