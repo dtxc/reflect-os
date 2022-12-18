@@ -103,9 +103,6 @@ void start_kernel(struct multiboot *mboot_ptr) {
     init_dynamic_mem();
     init_keyboard();
 
-    void *p = alloc(10);
-    kfree(p);
-
     print("Copyright (c) thatOneArchUser 2022-2023\n\nType 'help' for a command list\n>> ");
     while (1);
 }
