@@ -1,3 +1,10 @@
+/* 
+    Copyright (c) 2022-2023, thatOneArchUser
+    All rights reserved.
+
+    File: kheap.h
+*/
+
 #pragma once
 
 #include <common.h>

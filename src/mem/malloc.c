@@ -1,3 +1,10 @@
+/* 
+    Copyright (c) 2022-2023, thatOneArchUser
+    All rights reserved.
+
+    File: malloc.c
+*/
+
 #include <malloc.h>
 
 static u8 mem_area[DYNAMIC_MEM_SIZE];

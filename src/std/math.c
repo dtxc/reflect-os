@@ -1,3 +1,10 @@
+/* 
+    Copyright (c) 2022-2023, thatOneArchUser
+    All rights reserved.
+
+    File: math.c
+*/
+
 #include <math.h>
 
 static u32 next = 1;

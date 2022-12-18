@@ -1,3 +1,12 @@
+/* 
+    Copyright (c) 2022-2023, thatOneArchUser
+    All rights reserved.
+
+    File: psf.c
+*/
+
+//todo: linear frame buffer
+
 #include <psf.h>
 #include <malloc.h>
 

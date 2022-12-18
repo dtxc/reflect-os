@@ -1,3 +1,10 @@
+/* 
+    Copyright (c) 2022-2023, thatOneArchUser
+    All rights reserved.
+
+    File: timer.c
+*/
+
 #include <io.h>
 #include <isr.h>
 #include <timer.h>

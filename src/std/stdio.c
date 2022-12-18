@@ -1,3 +1,10 @@
+/* 
+    Copyright (c) 2022-2023, thatOneArchUser
+    All rights reserved.
+
+    File: stdio.c
+*/
+
 #include <vga.h>
 #include <math.h>
 #include <string.h>

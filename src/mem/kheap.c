@@ -1,4 +1,10 @@
-#include "ordered_array.h"
+/* 
+    Copyright (c) 2022-2023, thatOneArchUser
+    All rights reserved.
+
+    File: kheap.c
+*/
+
 #include <kheap.h>
 #include <paging.h>
 #include <hal/panic.h>

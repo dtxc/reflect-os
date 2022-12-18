@@ -1,3 +1,10 @@
+/* 
+    Copyright (c) 2022-2023, thatOneArchUser
+    All rights reserved.
+
+    File: io.h
+*/
+
 #include <common.h>
 
 #define PIC_MASTER_CMD 0x20

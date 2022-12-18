@@ -1,3 +1,10 @@
+/* 
+    Copyright (c) 2022-2023, thatOneArchUser
+    All rights reserved.
+
+    File: string.c
+*/
+
 #include <math.h>
 #include <malloc.h>
 #include <stdio.h>

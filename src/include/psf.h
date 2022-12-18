@@ -1,3 +1,12 @@
+/* 
+    Copyright (c) 2022-2023, thatOneArchUser
+    All rights reserved.
+
+    File: psf.h
+*/
+
+
+//PC Screen Font library
 #pragma once
 
 #include <common.h>

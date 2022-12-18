@@ -1,3 +1,10 @@
+/* 
+    Copyright (c) 2022-2023, thatOneArchUser
+    All rights reserved.
+
+    File: malloc.h
+*/
+
 #pragma once
 
 #include <common.h>

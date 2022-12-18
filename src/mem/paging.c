@@ -1,3 +1,10 @@
+/* 
+    Copyright (c) 2022-2023, thatOneArchUser
+    All rights reserved.
+
+    File: paging.c
+*/
+
 #include <vga.h>
 #include <kheap.h>
 #include <stdio.h>

@@ -1,3 +1,10 @@
+/* 
+    Copyright (c) 2022-2023, thatOneArchUser
+    All rights reserved.
+
+    File: paging.h
+*/
+
 #include <isr.h>
 
 #define PAGE_DIR_SIZE 1024

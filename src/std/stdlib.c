@@ -1,3 +1,10 @@
+/* 
+    Copyright (c) 2022-2023, thatOneArchUser
+    All rights reserved.
+
+    File: stdlib.c
+*/
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

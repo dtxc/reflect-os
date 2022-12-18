@@ -1,3 +1,10 @@
+/* 
+    Copyright (c) 2022-2023, thatOneArchUser
+    All rights reserved.
+
+    File: idt.c
+*/
+
 #include <io.h>
 #include <idt.h>
 #include <gdt.h>
