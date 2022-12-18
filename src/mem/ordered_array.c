@@ -65,3 +65,7 @@ void rm_oarr(u32 i, ordered_array_t *arr) {
     }
     arr->size--;
 }
+
+void destroy_oarr(ordered_array_t *arr) {
+    kfree(arr->arr);
+}
