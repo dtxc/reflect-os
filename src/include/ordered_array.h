@@ -24,7 +24,7 @@ char std_lt_predicate(type_t a, type_t b); //standard less than predicate
 ordered_array_t new_oarr(u32 max, predicate_t p);
 ordered_array_t place_oarr(void *addr, u32 max, predicate_t p);
 
-//void destroy_oarr(ordered_array_t *arr);
+void destroy_oarr(ordered_array_t *arr);
 void ins_oarr(type_t item, ordered_array_t *arr);
 type_t lookup_oarr(u32 i, ordered_array_t *arr);
 void rm_oarr(u32 i, ordered_array_t *arr);
