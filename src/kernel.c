@@ -18,8 +18,13 @@
 #include <string.h>
 #include <stdlib.h>
 #include <paging.h>
+#include <multiboot.h>
 
+#include <fs/initrd.h>
 #include <hw/keyboard.h>
+#include <hal/panic.h>
+
+extern u32 placement_addr;
 
 void panic(char *fmt, ...) {
     char *str;
@@ -92,7 +97,34 @@ int system(char *cmd) {
         panic("manually initiated panic");
         return EXIT_SUCCESS;
     } else if (strcmp(argv[0], "help")) {
-        print("Command list:\n\tclear - clears the screen\n\treboot - reboots the system\n\techo <text> - repeats your text\n\trand - returns a random number\n>> ");
+        print("Command list:\n\tclear - clears the screen\n\treboot - reboots the system\n\techo <text> - repeats your text\n\trand - returns a random number\n\tls - shows the contents of the root directory\n>> ");
+        return EXIT_SUCCESS;
+    } else if (strcmp(argv[0], "ls")) {
+        int i = 0;
+        struct dirent *node = 0;
+        print("Contents of root directory:\n");
+        while ((node = readdir_fs(fs_root, i)) != 0) {
+            printf("\t%s", node->name);
+            
+            fs_node_t *fsnode = finddir_fs(fs_root, node->name);
+            if ((fsnode->flags & 0x7) == FS_DIR) {
+                print("\t\tDIR\n");
+            } else {
+                if (argc > 1 && strcmp(argv[1], "-c") /*show contents*/) {
+                    print("\n\t\tcontents: ");
+                    u8 buff[256];
+                    u32 size = read_fs(fsnode, 0, 256, buff);
+
+                    for (int j = 0; j < size; j++) {
+                        printc(buff[j]);
+                    }
+                } else {
+                    printc('\n');
+                }
+            }
+            i++;
+        }
+        print("\n>> ");
         return EXIT_SUCCESS;
     }
 
@@ -106,9 +138,17 @@ void start_kernel(struct multiboot *mboot_ptr) {
     init_gdt();
     init_idt();
     psf_init();
+
+    ASSERT(mboot_ptr->mods_count > 0);
+    u32 initrd_pos = *((u32 *) mboot_ptr->mods_addr);
+    u32 initrd_end = *(u32 *) (mboot_ptr->mods_addr + 4);
+    placement_addr = initrd_end;
+
     init_paging();
     init_dynamic_mem();
     init_keyboard();
+
+    fs_root = init_initrd(initrd_pos);
 
     print("Copyright (c) thatOneArchUser 2022-2023\n\nType 'help' for a command list\n>> ");
     while (1);
