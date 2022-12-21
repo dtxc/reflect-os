@@ -5,3 +5,4 @@ i386 os (wip)
 + keyboard and vga drivers
 + dynamic memory
 + paging (finally)
++ basic initrd functions
