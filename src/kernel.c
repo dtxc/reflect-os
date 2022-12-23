@@ -150,6 +150,6 @@ void start_kernel(struct multiboot *mboot_ptr) {
 
     fs_root = init_initrd(initrd_pos);
 
-    print("Copyright (c) thatOneArchUser 2022-2023\n\nType 'help' for a command list\n>> ");
+    print("Copyright (c) thatOneArchUser 2022-2023\n\nWelcome to reflect os!\nType 'help' for a command list\n>> ");
     while (1);
 }
