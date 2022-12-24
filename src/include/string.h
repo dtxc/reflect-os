@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include <math.h>
 #include <common.h>
 
 void append(char *s, char n);
@@ -22,6 +21,7 @@ int itoa(char *dest, int num);
 int int2hex(char *dest, int num);
 int memcmp(void *a, void *b, u32 n);
 bool isdigit(char c);
+bool isnumber(char *c);
 char *strcat(char *dest, char *src);
 char *strdup(char *token);
 char *strtok(char *s, char *delm);
