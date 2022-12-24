@@ -2,7 +2,7 @@
     Copyright (c) 2022-2023, thatOneArchUser
     All rights reserved.
 
-    File: speakers.c
+    File: speaker.c
 */
 
 #include <io.h>
