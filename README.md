@@ -6,7 +6,7 @@ most stable os in ohio :skull:
 + page fault
 + keyboard not working
 + page fault
-+ pit sleep not working
++ general protection fault
 
 i love democracy
 
