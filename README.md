@@ -2,10 +2,11 @@
 most stable os in ohio :skull:
 
 ## features
-+ keyboard and vga drivers
-+ dynamic memory
-+ paging (finally)
-+ basic initrd functions
++ page fault
++ page fault
++ keyboard not working
++ page fault
++ pit sleep not working
 
 i love democracy
 
