@@ -1,5 +1,5 @@
 # reflect-os
-os (wip)
+most stable os in ohio
 
 ## features
 + keyboard and vga drivers
