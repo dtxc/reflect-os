@@ -1,5 +1,5 @@
 # reflect-os
-most stable os in ohio :skull:
+very stable os frfr
 
 ## features
 + page fault
