@@ -1,10 +1,3 @@
-/* 
-    Copyright (c) 2022-2023, thatOneArchUser
-    All rights reserved.
-
-    File: io.c
-*/
-
 #include <common.h>
 
 void outb(u16 port, u8 val) {

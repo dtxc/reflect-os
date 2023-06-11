@@ -1,10 +1,3 @@
-/* 
-    Copyright (c) 2022-2023, thatOneArchUser
-    All rights reserved.
-
-    File: isr.h
-*/
-
 #pragma once
 
 #include <common.h>
@@ -26,8 +19,6 @@
 #define IRQ14 46
 #define IRQ15 47
 
-#define IRQ_SYSCALL 0x80
-
 typedef struct {
     u32 ds;
     u32 edi, esi, ebp, esp, ebx, edx, ecx, eax;
@@ -35,7 +26,7 @@ typedef struct {
     u32 eip, cs, eflags, useresp, ss;
 } regs_t;
 
-typedef void (*isr_t) (regs_t);
+typedef void (*isr_t) (regs_t*);
 
 void register_interrupt_handler(u8 n, isr_t handler);
 void delete_interrupt_handler(u8 n);

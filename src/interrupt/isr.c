@@ -1,10 +1,3 @@
-/* 
-    Copyright (c) 2022-2023, thatOneArchUser
-    All rights reserved.
-
-    File: isr.c
-*/
-
 #include <io.h>
 #include <isr.h>
 #include <vga.h>
@@ -22,12 +15,12 @@ void clear_int() {
 void isr_handler(regs_t regs) {
     if (interrupt_handlers[regs.int_no] != 0) {
         isr_t handler = interrupt_handlers[regs.int_no];
-        handler(regs);
+        handler(&regs);
     } else {
+        printc(regs.int_no + 48);
         //panic("unhandled interrupt: %d\nerr_code: %d  ", regs.int_no, regs.err_code);
         //printf("unhandled interrupt: %d", regs.int_no);
-        printc(regs.int_no);
-        while (1) asm volatile("hlt");
+        //printc(regs.int_no);
     }
 }
 
@@ -43,7 +36,7 @@ void irq_handler(regs_t regs) {
 
     if (interrupt_handlers[regs.int_no] != 0) { //handle interrupt
         isr_t handler = interrupt_handlers[regs.int_no];
-        handler(regs);
+        handler(&regs);
     }
 }
 

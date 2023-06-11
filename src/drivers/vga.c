@@ -1,10 +1,3 @@
-/* 
-    Copyright (c) 2022-2023, thatOneArchUser
-    All rights reserved.
-
-    File: vga.c
-*/
-
 #include <io.h>
 #include <vga.h>
 #include <stdlib.h>

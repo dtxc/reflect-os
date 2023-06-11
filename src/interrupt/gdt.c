@@ -1,10 +1,3 @@
-/* 
-    Copyright (c) 2022-2023, thatOneArchUser
-    All rights reserved.
-
-    File: gdt.c
-*/
-
 #include <gdt.h>
 #include <tss.h>
 
@@ -12,7 +5,6 @@
 
 extern void gdt_flush(u32);
 extern tss_entry_t tss;
-
 
 gdt_entry_t gdt_entries[GDT_ENTRY_NUM];
 gdt_ptr_t gdt_ptr;
@@ -38,7 +30,7 @@ void init_gdt() {
     set_gdt_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF); //kernel data segment
     set_gdt_gate(3, 0, 0xFFFFFFFF, 0xFA, 0xCF); //usermode code segment
     set_gdt_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); //usermode data segment
-    write_tss(5, 0x10, 0x0);                                 //task state segment
+    write_tss(5, 0x10, 0x0);                    //task state segment
 
     gdt_flush((u32) &gdt_ptr);
     tss_flush();

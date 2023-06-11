@@ -1,10 +1,3 @@
-/* 
-    Copyright (c) 2022-2023, thatOneArchUser
-    All rights reserved.
-
-    File: task.c
-*/
-
 #include <tss.h>
 #include <kheap.h>
 #include <stdio.h>
@@ -87,7 +80,7 @@ int fork() {
     tmp_task->next = new_task;
 
     u32 eip = read_eip();
-
+    
     if (crt_task == parent) {
         u32 esp;
         u32 ebp;
@@ -130,7 +123,7 @@ void task_switch() {
 
     esp = crt_task->regs.esp;
     ebp = crt_task->regs.ebp;
-    //eip = crt_task->regs.eip;
+    eip = crt_task->regs.eip;
 
     crt_dir = crt_task->dir;
     set_kernel_stack(crt_task->kernel_stack + KERNEL_STACK_SIZE);
@@ -150,7 +143,9 @@ int getpid() {
     return crt_task->id;
 }
 
-void switch_to_usermode() { //not working
+extern void jump_usermode();
+
+void switch_to_usermode() {
     set_kernel_stack(crt_task->kernel_stack + KERNEL_STACK_SIZE);
 
     asm volatile(" \
@@ -170,5 +165,6 @@ void switch_to_usermode() { //not working
         pushl $0x1B;    \
         push $1f;       \
         iret;           \
-        1:"); /* we cannot enable interrupts with sti again because we will get a gpf (L159-161)*/
+        1:\
+        ");
 }

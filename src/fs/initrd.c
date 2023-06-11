@@ -1,10 +1,3 @@
-/* 
-    Copyright (c) 2022-2023, thatOneArchUser
-    All rights reserved.
-
-    File: initrd.c
-*/
-
 #include <kheap.h>
 #include <string.h>
 #include <fs/initrd.h>

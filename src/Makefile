@@ -3,7 +3,6 @@ OBJ_FILES = ${C_SOURCES:.c=.o \
 	boot/boot.o \
 	boot/dt.o \
 	interrupt/interrupt.o \
-	fonts/terminus.o \
 	task/process.o}
 
 CCFLAGS = -I ./include -g -m32 -ffreestanding -nostdlib -fno-builtin -fno-stack-protector -no-pie -fno-pic -Wall -Wextra -O2
@@ -13,6 +12,8 @@ OSBIN = ../os-image.iso
 build: prepare os-image.iso
 
 os-image.iso: kernel.bin
+	objcopy --only-keep-debug ../build/kernel.bin ../build/kernel.sym
+	objcopy --strip-debug ../build/kernel.bin
 	cd ../build && cp ./$^ ./boot/$^ && cp ../src/boot/grub.cfg ./boot/grub/grub.cfg && cd .. && \
 		grub-mkrescue -o $@ build
 
@@ -27,31 +28,23 @@ ifeq ($(shell test -e $(OSBIN) && echo -n yes),yes)
 	qemu-system-i386 -cdrom $(OSBIN) -soundhw pcspk -rtc base=localtime,clock=host
 else
 	$(MAKE) build
-	qemu-system-i386 -cdrom $(OSBIN) -soundhw pcspk
+	qemu-system-i386 -cdrom $(OSBIN) -soundhw pcspk -rtc base=localtime,clock=host
 endif
+
+# debug:
+# ifeq ($(shell test -e $(OSBIN) && echo -n yes),yes)
+# 	qemu-system-i386 -cdrom $(OSBIN) -d int --no-reboot -soundhw pcspk -rtc base=localtime,clock=host
+# else
+# 	$(MAKE) build
+# 	qemu-system-i386 -cdrom $(OSBIN) -d int --no-reboot -soundhw pcspk -rtc base=localtime,clock=host
+# endif
 
 debug:
 ifeq ($(shell test -e $(OSBIN) && echo -n yes),yes)
-	qemu-system-i386 -cdrom $(OSBIN) -d int --no-reboot -soundhw pcspk
+	qemu-system-i386 -s -S -cdrom $(OSBIN)
 else
 	$(MAKE) build
-	qemu-system-i386 -cdrom $(OSBIN) -d int --no-reboot -soundhw pcspk
-endif
-
-run-kernel:
-ifeq ($(shell test -e $(KERNELBIN) && echo -n yes),yes)
-	qemu-system-i386 -kernel $(KERNELBIN) -soundhw pcspk
-else
-	$(MAKE) build
-	qemu-system-i386 -kernel $(KERNELBIN) -soundhw pcspk
-endif
-
-debug-kernel:
-ifeq ($(shell test -e $(KERNELBIN) && echo -n yes),yes)
-	qemu-system-i386 -kernel $(KERNELBIN) -d int --no-reboot -soundhw pcspk
-else
-	$(MAKE) build
-	qemu-system-i386 -kernel $(KERNELBIN) -d int --no-reboot -soundhw pcspk
+	qemu-system-i386 -s -S -cdrom $(OSBIN)
 endif
 
 %.o: %.c

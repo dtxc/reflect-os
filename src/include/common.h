@@ -1,10 +1,3 @@
-/* 
-    Copyright (c) 2022-2023, thatOneArchUser
-    All rights reserved.
-
-    File: common.h
-*/
-
 #include <stdbool.h>
 
 #define nullptr (void *) 0

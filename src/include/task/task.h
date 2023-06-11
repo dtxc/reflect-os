@@ -1,10 +1,3 @@
-/* 
-    Copyright (c) 2022-2023, thatOneArchUser
-    All rights reserved.
-
-    File: task.h
-*/
-
 #pragma once
 
 #include <paging.h>
@@ -17,6 +10,8 @@ typedef struct task {
     regs_t regs;
     pagedir_t *dir;
     struct task *next;
+    u8 state;
+    u64 sleep_expiry;
 } task_t;
 
 void init_tasking();

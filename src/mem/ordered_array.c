@@ -1,10 +1,3 @@
-/* 
-    Copyright (c) 2022-2023, thatOneArchUser
-    All rights reserved.
-
-    File: ordered_array.c
-*/
-
 #include <kheap.h>
 #include <string.h>
 #include <ordered_array.h>

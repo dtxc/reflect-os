@@ -1,15 +1,8 @@
-/* 
-    Copyright (c) 2022-2023, thatOneArchUser
-    All rights reserved.
-
-    File: stdio.c
-*/
-
-#include <vga.h>
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <syscall.h>
 
 void vprintf(char *fmt, va_list list) {
     int i = 0;
@@ -31,17 +24,17 @@ void vprintf(char *fmt, va_list list) {
                 int int_arg = va_arg(list, int);
                 char *p;
                 itoa(p, int_arg);
-                print(p);
+                syscall_print(p);
             } else if (next == 'u') {
                 u32 uint_arg = va_arg(list, u32);
                 char *buff;
                 itoa(buff, uint_arg);
-                print(buff);
+                syscall_print(buff);
             } else if (next == 'x') {
                 u32 uint_arg = va_arg(list, u32);
                 char *p;
                 int2hex(p, uint_arg);
-                print(p);
+                syscall_print(p);
             } else if (next == 'c') {
                 char n = fmt[i + 1];
                 if (n == 'p') {
@@ -56,21 +49,21 @@ void vprintf(char *fmt, va_list list) {
                     }
                 } else {
                     char char_arg = va_arg(list, int);
-                    printc(char_arg);
+                    syscall_printc(char_arg);
                 }
             } else if (next == 's') {
                 char *str_arg = va_arg(list, char*);
-                print(str_arg);
+                syscall_print(str_arg);
             } else if (next == 'f') {
                 double double_arg = va_arg(list, double);
                 char buff[10];
                 ftoa(buff, double_arg);
-                print(buff);
+                syscall_print(buff);
             } else if (next == '%') {
-                printc('%');
+                syscall_printc('%');
             }
         } else {
-            printc(c);
+            syscall_printc(c);
         }
         i++;
     }

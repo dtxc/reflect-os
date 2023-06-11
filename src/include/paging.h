@@ -1,10 +1,3 @@
-/* 
-    Copyright (c) 2022-2023, thatOneArchUser
-    All rights reserved.
-
-    File: paging.h
-*/
-
 #pragma once
 
 #include <isr.h>

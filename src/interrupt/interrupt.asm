@@ -3,7 +3,7 @@
     isr%1:
         cli
         push byte 0
-        push byte %1
+        push %1
         jmp isr_common_stub
 %endmacro
 
@@ -11,7 +11,7 @@
     global isr%1
     isr%1:
         cli
-        push byte %1
+        push %1
         jmp isr_common_stub
 %endmacro
 
@@ -60,7 +60,7 @@ ISR_NOERR 31
 ISR_NOERR 128
 
 extern isr_handler
-
+    
 isr_common_stub:
     pusha
     mov ax, ds
@@ -74,33 +74,33 @@ isr_common_stub:
 
     call isr_handler
 
-    pop eax
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
+    pop ebx
+    mov ds, bx
+    mov es, bx
+    mov fs, bx
+    mov gs, bx
 
     popa
     add esp, 8
     sti
     iret
 
-IRQ   0,    32
-IRQ   1,    33
-IRQ   2,    34
-IRQ   3,    35
-IRQ   4,    36
-IRQ   5,    37
-IRQ   6,    38
-IRQ   7,    39
-IRQ   8,    40
-IRQ   9,    41
-IRQ   10,    42
-IRQ   11,    43
-IRQ   12,    44
-IRQ   13,    45
-IRQ   14,    46
-IRQ   15,    47
+IRQ 0,  32
+IRQ 1,  33
+IRQ 2,  34
+IRQ 3,  35
+IRQ 4,  36
+IRQ 5,  37
+IRQ 6,  38
+IRQ 7,  39
+IRQ 8,  40
+IRQ 9,  41
+IRQ 10, 42
+IRQ 11, 43
+IRQ 12, 44
+IRQ 13, 45
+IRQ 14, 46
+IRQ 15, 47
 
 extern irq_handler
 

@@ -1,24 +1,31 @@
-/* 
-    Copyright (c) 2022-2023, thatOneArchUser
-    All rights reserved.
-
-    File: tss.h
-*/
-
 #include <common.h>
 
 typedef struct {
     u32 prev_tss;
-    u32 esp0, esp1, esp2;
-    u32 ss0, ss1, ss2;
-    u32 cr3;
-    u32 eip;
+    u32 esp0;
+    u32 ss0; 
+    u32 esp1;
+    u32 ss1;
+    u32 esp2;  
+    u32 ss2;   
+    u32 cr3;   
+    u32 eip;   
     u32 eflags;
-    u32 eax, ebx, ecx, edx;
-    u32 esp, ebp, esi, edi;
-    u32 es, cs, ss, ds, fs, gs;
+    u32 eax;
+    u32 ecx;
+    u32 edx;
+    u32 ebx;
+    u32 esp;
+    u32 ebp;
+    u32 esi;
+    u32 edi;
+    u32 es;
+    u32 cs;
+    u32 ss;
+    u32 ds;
+    u32 fs;
+    u32 gs;
     u32 ldt;
-
     u16 trap;
     u16 iomap_base;
 } __attribute__((packed)) tss_entry_t;

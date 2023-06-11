@@ -1,10 +1,3 @@
-/* 
-    Copyright (c) 2022-2023, thatOneArchUser
-    All rights reserved.
-
-    File: speakers.c
-*/
-
 #include <io.h>
 
 static void play_sound(u32 freq) {

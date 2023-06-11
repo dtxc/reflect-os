@@ -1,15 +1,9 @@
-/* 
-    Copyright (c) 2022-2023, thatOneArchUser
-    All rights reserved.
-
-    File: keyboard.c
-*/
-
 #include <io.h>
 #include <isr.h>
 #include <vga.h>
 #include <string.h>
 #include <stdlib.h>
+#include <syscall.h>
 
 const char sc_ascii_shift[] = {'?', '?', '!', '@', '#', '$', '%', '^',
                          '&', '*', '(', ')', '_', '+', '?', '?', 'Q', 'W', 'E', 'R', 'T', 'Y',
@@ -82,7 +76,7 @@ static void keyboard_callback() {
             char letter = (shift) ? sc_ascii_shift[scancode] : sc_ascii[scancode];
             append(key_buffer, letter);
             char str[2] = {letter, '\0'};
-            print(str);
+            syscall_print(str);
             inb(KEYBOARD_STATUS);
         }
     }

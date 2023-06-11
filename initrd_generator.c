@@ -1,7 +1,6 @@
 #include <stdio.h>
 
-struct initrd_header
-{
+struct initrd_header {
 	unsigned char magic;
 	char name[64];
 	unsigned int offset;

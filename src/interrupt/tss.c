@@ -1,10 +1,3 @@
-/* 
-    Copyright (c) 2022-2023, thatOneArchUser
-    All rights reserved.
-
-    File: tss.c
-*/
-
 #include <tss.h>
 #include <gdt.h>
 #include <string.h>
@@ -17,7 +10,7 @@ void write_tss(int num, u16 ss0, u32 esp0) {
     u32 base = (u32) &tss;
     u32 lim = base + sizeof(tss);
 
-    set_gdt_gate(num, base, lim, 0x89, 0x00);
+    set_gdt_gate(num, base, lim, 0xE9, 0x00);
     memset(&tss, 0, sizeof(tss));
 
     tss.ss0  = ss0;

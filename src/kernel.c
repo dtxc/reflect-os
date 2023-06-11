@@ -1,28 +1,20 @@
-/* 
-    Copyright (c) 2022-2023, thatOneArchUser
-    All rights reserved.
-
-    File: kernel.c
-*/
-
 #include <io.h>
 #include <vga.h>
 #include <gdt.h>
 #include <idt.h>
-#include <psf.h>
-#include <pmm.h>
 #include <rtc.h>
+#include <math.h>
 #include <timer.h>
 #include <kheap.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <paging.h>
+#include <syscall.h>
 #include <multiboot.h>
 
 #include <hal/panic.h>
 #include <task/task.h>
-#include <fs/initrd.h>
 #include <hw/speaker.h>
 #include <hw/keyboard.h>
 
@@ -65,8 +57,9 @@ void reboot() {
 int system(char *cmd) {
     printf("\n");
     cmd = trim(cmd);
-    char **argv;    
-    int argc = split(cmd, ' ', &argv);
+
+    char argv[10][100];    
+    int argc = split(cmd, " ", argv);
     int status = ERR_CMD_NOTFOUND;
 
     if (strcmp(argv[0], "clear")) {
@@ -141,10 +134,6 @@ int system(char *cmd) {
         printf("Unknown command: %s\n>> ", argv[0]);
     }
 
-    for (int i = 0; i < argc; i++) {
-        kfree(argv[i]);
-    }
-
     return status;
 }
 
@@ -153,50 +142,31 @@ void start_kernel(struct multiboot *mboot_ptr, u32 initial_stack) {
     initial_esp = initial_stack;
     clear();
 
-    print("Initializing global descriptor table\n");
     init_gdt();
-
-    print("Initializing interrupt descriptor table\n");
     init_idt();
 
-    print("Initializing interrupt mask register\n");
     outb(PIC_MASTER_DAT, 0xF9);
 
-    print("Initializing PC screen font\n");
-    psf_init();
-
-    print("Setting initrd addresses\n");
     ASSERT(mboot_ptr->mods_count > 0);
     u32 initrd_pos = *((u32 *) mboot_ptr->mods_addr);
     u32 initrd_end = *(u32 *) (mboot_ptr->mods_addr + 4);
     placement_addr = initrd_end;
 
-    print("Initializing paging\n");
     init_paging();  
-
-    print("Initializing tasking system\n");
     init_tasking();
 
-    print("Initializing PIT (IRQ 0)\n");
     init_timer(100);
-
-    print("Initializing keyboard (IRQ 1)\n");
     init_keyboard();
 
-    print("Setting up initrd root\n");
     fs_root = init_initrd(initrd_pos);
 
-    print("Initializing physical memory manager\n");
-    init_pmm(1073741824); // 1 GB
-
-    print("\nInitializing Real Time Clock (IRQ 8)\n");
     init_rtc();
-    print_crt_time();
 
-    print("\nEnabling interrupts\n");
-    asm volatile("sti");
-    //clear();
+    init_syscalls();
+    switch_to_usermode();
 
-    print("Copyright (c) thatOneArchUser 2022-2023\n\nWelcome to reflect os!\nType 'help' for a command list\n>> ");
+    syscall_clear();
+
+    syscall_print("Welcome to reflect os!\nType 'help' for a command list\n>> ");
     return;
 }

@@ -1,10 +1,3 @@
-/* 
-    Copyright (c) 2022-2023, thatOneArchUser
-    All rights reserved.
-
-    File: multiboot.h
-*/
-
 #include <common.h>
 
 #define MULTIBOOT_FLAG_MEM     0x001

@@ -1,10 +1,3 @@
-/* 
-    Copyright (c) 2022-2023, thatOneArchUser
-    All rights reserved.
-
-    File: vfs.h
-*/
-
 #pragma once
 
 #include <common.h>
@@ -56,3 +49,4 @@ void open_fs(fs_node_t *node, u8 read, u8 write);
 void close_fs(fs_node_t *node);
 struct dirent *readdir_fs(fs_node_t *node, u32 index);
 fs_node_t *finddir_fs(fs_node_t *node, char *name);
+int read_file(u8 *dest, char *name);

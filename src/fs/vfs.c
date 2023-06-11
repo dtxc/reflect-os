@@ -1,10 +1,3 @@
-/* 
-    Copyright (c) 2022-2023, thatOneArchUser
-    All rights reserved.
-
-    File: vfs.c
-*/
-
 #include <fs/vfs.h>
 
 fs_node_t *fs_root = 0;
@@ -46,4 +39,14 @@ fs_node_t *finddir_fs(fs_node_t *node, char *name) {
     if ((node->flags & 0x7) == FS_DIR && node->readdir != 0) {
         return node->finddir(node, name);
     }
+}
+
+int read_file(u8 *dest, char *name) {
+    fs_node_t *fsnode = (fs_node_t *) finddir_fs(fs_root, name);
+    if ((fsnode->flags & 0x7) == FS_DIR) {
+        return -1;
+    }
+    u32 s = read_fs(fsnode, 0, sizeof(dest), dest);
+    
+    return s;
 }

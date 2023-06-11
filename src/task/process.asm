@@ -44,3 +44,10 @@ read_edx:
 
 read_eax:
     ret
+
+global sys_test
+sys_test:
+    mov eax, 3
+    int 0x80
+
+    mov edx, eax

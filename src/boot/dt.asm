@@ -3,7 +3,7 @@ global idt_flush
 global tss_flush
 
 gdt_flush:
-    mov eax, [esp + 4]
+    mov eax, [esp+4]
     lgdt [eax]
 
     mov ax, 0x10
@@ -17,7 +17,7 @@ gdt_flush:
     ret
 
 idt_flush:
-    mov eax, [esp + 4]
+    mov eax, [esp+4]
     lidt [eax]
     ret
 

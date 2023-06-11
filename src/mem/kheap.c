@@ -1,10 +1,3 @@
-/* 
-    Copyright (c) 2022-2023, thatOneArchUser
-    All rights reserved.
-
-    File: kheap.c
-*/
-
 #include <kheap.h>
 #include <paging.h>
 #include <hal/panic.h>
@@ -262,7 +255,7 @@ static void free(void *p, heap_t *heap) {
         return;
     }
 
-    header_t *head = (header_t *) ((u32)p -sizeof(header_t));
+    header_t *head = (header_t *) ((u32)p - sizeof(header_t));
     footer_t *foot = (footer_t *) ((u32)head + head->size - sizeof(footer_t));
 
     ASSERT(head->magic == HEAP_MAGIC);
