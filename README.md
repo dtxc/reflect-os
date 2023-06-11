@@ -1,12 +1,4 @@
 # reflect-os
-very stable os frfr
-
-## features
-+ page fault
-+ page fault
-+ keyboard not working
-+ page fault
-+ general protection fault
 
 i love democracy
 
